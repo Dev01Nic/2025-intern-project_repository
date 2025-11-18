@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Change Request</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        body { font-family: 'Poppins', sans-serif; background-color: #f9fafb; color: #1e293b; }
+        .sidebar { min-height: 100vh; background-color: #fff; border-right: 1px solid #e5e7eb; padding: 1.5rem 1rem; }
+        .sidebar h2 { font-weight: 600; color: #2563eb; margin-bottom: 2rem; }
+        .sidebar a { display: flex; align-items: center; gap: 0.5rem; color: #1e293b; padding: 0.5rem 1rem; border-radius: 0.75rem; text-decoration: none; font-weight: 500; transition: all 0.3s; }
+        .sidebar a:hover { background-color: #f1f5f9; color: #2563eb; }
+        .icon { font-size: 1.25rem; }
+        .form-box { background: #fff; padding: 2rem; border-radius: 0.75rem; box-shadow: 0 4px 12px rgba(0,0,0,0.06); }
+        .form-box h2 { font-weight: 600; color: #2563eb; margin-bottom: 1.5rem; }
+    </style>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <nav class="col-md-2 d-none d-md-block sidebar">
+            <h5>Department User Panel</h5>
+            <a th:href="@{/department/dashboard}">
+                <div class="icon">📊</div>
+                <span>Dashboard</span>
+            </a>
+            <a th:href="@{/department/projects}">
+                <div class="icon">📂</div>
+                <span>View Projects</span>
+            </a>
+            <a th:href="@{/department/issues}">
+                <div class="icon">🐞</div>
+                <span>Issue Tracking</span>
+            </a>
+            <a th:href="@{/department/change-requests}">
+                <div class="icon">🔄</div>
+                <span>Change Requests</span>
+            </a>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="col-md-10 ms-sm-auto px-4 py-4">
+            <h1 class="mb-4">Create New Change Request</h1>
+
+            <div class="form-box">
+                <!-- Form -->
+                <form th:action="@{/department/change-requests/save}" th:object="${changeRequest}" method="post">
+
+                    <!-- Title -->
+                    <div class="mb-3">
+                        <label class="form-label">Title</label>
+                        <input type="text" class="form-control" th:field="*{title}" placeholder="Enter change request title" required>
+                    </div>
+
+                    <!-- Description -->
+                    <div class="mb-3">
+                        <label class="form-label">Description</label>
+                        <textarea class="form-control" th:field="*{description}" rows="4" placeholder="Enter detailed description" required></textarea>
+                    </div>
+
+                    <!-- Project -->
+                    <div class="mb-3">
+                        <label class="form-label">Project</label>
+                        <select class="form-select" th:field="*{project}" required>
+                            <option value="">-- Select Project --</option>
+                            <option th:each="proj : ${projects}"
+                                    th:value="${proj.projectId}"
+                                    th:text="${proj.projectName}">
+                            </option>
+                        </select>
+                    </div>
+
+                    <!-- Priority -->
+                    <div class="mb-3">
+                        <label class="form-label">Priority</label>
+                        <select class="form-select" th:field="*{priority}" required>
+                            <option value="">-- Select Priority --</option>
+                            <option th:each="p : ${priorities}"
+                                    th:value="${p.priorityId}"
+                                    th:text="${p.priorityName}">
+                            </option>
+                        </select>
+                    </div>
+<input type="hidden" th:field="*{status}" th:value="'Submitted'">
+
+                    <!-- Status
+                    <div class="mb-3">
+                        <label class="form-label">Status</label>
+                        <select class="form-select" th:field="*{status}" required>
+                            <option value="">-- Select Status --</option>
+                            <option th:each="s : ${statuses}"
+                                    th:value="${s.id}"
+                                    th:text="${s.name}">
+                            </option>
+                        </select>
+                    </div> -->
+
+                    <!-- Assigned To (Technical User) 
+                    <div class="mb-3">
+                        <label class="form-label">Assign To (Technical User)</label>
+                        <select class="form-select" th:field="*{approvedBy}">
+                            <option value="">-- Select Technical User --</option>
+                            <option th:each="tech : ${technicalUsers}"
+                                    th:value="${tech.id}"
+                                    th:text="${tech.name}">
+                            </option>
+                        </select>
+                    </div>-->
+
+                    <!-- Submit Buttons -->
+                        <button type="submit" class="btn btn-primary">Submit Change Request</button>
+                		                        <a th:href="@{/department/change-requests}" class="btn btn-secondary">Cancel</a>
+                </form>
+                
+            </div>
+        </main>
+    </div>
+</div>
+</body>
+</html>

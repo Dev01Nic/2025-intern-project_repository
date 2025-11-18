@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Issue Tracking Dashboard</title>
+
+    <!-- Bootstrap & Chart.js -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        body { font-family: 'Poppins', sans-serif; background-color: #f9fafb; }
+        .sidebar { min-height: 100vh; background-color: #fff; border-right: 1px solid #e5e7eb; }
+        .sidebar h4 { color: #2563eb; font-weight: 600; margin-bottom: 1.5rem; }
+        .sidebar a { display: flex; align-items: center; gap: 0.5rem; color: #1e293b;
+                     padding: 0.6rem 1rem; border-radius: 0.75rem; text-decoration: none;
+                     transition: all 0.3s; }
+        .sidebar a:hover { background-color: #f1f5f9; color: #2563eb; }
+        .sidebar .collapse a { color: #475569; padding-left: 1.5rem; display: block;
+                               text-decoration: none; border-radius: 0.5rem; transition: all 0.3s; }
+        .sidebar .collapse a:hover { background-color: #f8fafc; color: #2563eb; }
+        .icon { font-size: 1.25rem; }
+        .card-custom { border: none; border-radius: 0.75rem; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .card-title { font-weight: 600; color: #334155; }
+        .summary-card { text-align: center; padding: 1.5rem 1rem; }
+        .summary-card h2 { font-size: 2rem; font-weight: 700; margin-bottom: 0.25rem; color: #2563eb; }
+        .summary-card p { margin: 0; font-weight: 500; color: #64748b; }
+        .table-box { background: #fff; padding: 1.5rem; border-radius: 0.75rem;
+                     box-shadow: 0 4px 12px rgba(0,0,0,0.06); margin-top: 2rem; }
+    </style>
+</head>
+
+<body>
+<div class="d-md-none bg-white p-2 shadow-sm w-100 d-flex justify-content-between align-items-center">
+    
+    <!-- Left: Menu button -->
+    <button class="btn btn-outline-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileSidebar">
+        ☰ Menu
+    </button>
+
+    <!-- Right: Profile button -->
+    <a href="/" class="btn btn-primary rounded-pill px-3">
+        👤
+    </a>
+
+</div>
+
+
+
+<!-- 🔹 MOBILE OFFCANVAS SIDEBAR -->
+<div class="offcanvas offcanvas-start" tabindex="-1" id="mobileSidebar">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title">Menu</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+    </div>
+
+    <div class="offcanvas-body sidebar p-0">
+
+        <a th:href="@{/department/dashboard}">
+            <div class="icon">📊</div><span>Dashboard</span>
+        </a>
+
+        <a data-bs-toggle="collapse" href="#mobileProjectMenu">
+            <div class="icon">📁</div><span>Projects ▾</span>
+        </a>
+        <div class="collapse ps-4" id="mobileProjectMenu">
+            <a th:href="@{/department/projects/dashboard}" class="d-block small py-1">Project Dashboard</a>
+            <a th:href="@{/department/projects}" class="d-block small py-1">View Projects</a>
+        </div>
+
+        <a data-bs-toggle="collapse" href="#mobileIssueMenu">
+            <div class="icon">🐞</div><span>Issue Tracking ▾</span>
+        </a>
+        <div class="collapse ps-4" id="mobileIssueMenu">
+            <a th:href="@{/department/issues/dashboard}" class="d-block small py-1">Issue Dashboard</a>
+            <a th:href="@{/department/issues}" class="d-block small py-1">View Issues</a>
+        </div>
+
+        <a data-bs-toggle="collapse" href="#mobileCrMenu">
+            <div class="icon">🔁</div><span>Change Requests ▾</span>
+        </a>
+        <div class="collapse ps-4" id="mobileCrMenu">
+            <a th:href="@{/department/change-requests/dashboard}" class="d-block small py-1">Change Request Dashboard</a>
+            <a th:href="@{/department/change-requests}" class="d-block small py-1">View Requests</a>
+        </div>
+    
+    </div>
+    
+</div>
+
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <nav class="col-md-2 d-none d-md-block sidebar py-4 px-3">
+            <h4>Department User Panel</h4>
+
+            <a th:href="@{/department/dashboard}">
+                <div class="icon">📊</div><span>Dashboard</span>
+            </a>
+
+            <!-- Project Menu -->
+            <a data-bs-toggle="collapse" href="#projectMenu" role="button" aria-expanded="false" aria-controls="projectMenu">
+                <div class="icon">📁</div><span>Projects ▾</span>
+            </a>
+            <div class="collapse ps-4" id="projectMenu" data-bs-parent=".sidebar">
+                <a th:href="@{/department/projects/dashboard}" class="d-block small py-1">Project Dashboard</a>
+                <a th:href="@{/department/projects}" class="d-block small py-1">View Projects</a>
+            </div>
+
+            <!-- Issue Menu -->
+            <a data-bs-toggle="collapse" href="#issueMenu">
+                <div class="icon">🐞</div><span>Issue Tracking ▾</span>
+            </a>
+            <div class="collapse ps-4" id="issueMenu">
+                <a th:href="@{/department/issues/dashboard}" class="d-block small py-1">Issue Dashboard</a>
+                <a th:href="@{/department/issues}" class="d-block small py-1">View Issues</a>
+            </div>
+
+            <!-- Change Requests -->
+            <a data-bs-toggle="collapse" href="#crMenu">
+                <div class="icon">🔁</div><span>Change Requests ▾</span>
+            </a>
+            <div class="collapse ps-4" id="crMenu">
+                <a th:href="@{/department/change-requests/dashboard}" class="d-block small py-1">Change Request Dashboard</a>
+                <a th:href="@{/department/change-requests}" class="d-block small py-1">View Requests</a>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="col-md-10 ms-sm-auto px-4 py-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="fw-semibold text-primary">Issue Tracking Dashboard</h1>
+                <a th:href="@{/department/issues}" class="btn btn-outline-primary rounded-pill">View All Issues</a>
+            </div>
+
+            <!-- Summary Cards -->
+            <div class="row g-4 mb-5">
+                <div class="col-md-3">
+                    <div class="card card-custom summary-card">
+                        <h2 th:text="${totalIssues}">120</h2>
+                        <p>Total Issues</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card card-custom summary-card">
+                        <h2 th:text="${openCount}">45</h2>
+                        <p>Open</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card card-custom summary-card">
+                        <h2 th:text="${inProgressCount}">30</h2>
+                        <p>In Progress</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card card-custom summary-card">
+                        <h2 th:text="${resolvedCount}">40</h2>
+                        <p>Resolved</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Row -->
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="card card-custom p-4">
+                        <h5 class="card-title mb-3">Issues by Status</h5>
+                        <canvas id="statusChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="card card-custom p-4">
+                        <h5 class="card-title mb-3">Issues by Priority</h5>
+                        <canvas id="priorityChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Issues Table -->
+            <div class="table-box mt-5">
+                <h5 class="mb-3 text-primary fw-semibold">Recent Issues</h5>
+                <table class="table table-striped table-bordered align-middle">
+                    <thead class="table-light">
+                    <tr>
+                        <th>Title</th>
+                        <th>Project</th>
+                        <th>Priority</th>
+                        <th>Status</th>
+                        <th>Reported By</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="issue : ${recentIssues}">
+                        <td th:text="${issue.title}">Database Connection Error</td>
+                        <td th:text="${issue.project.projectName}">Inventory System</td>
+                        <td th:text="${issue.priority.priorityName}">High</td>
+                        <td th:text="${issue.status.name}">Open</td>
+                        <td th:text="${issue.reportedBy.name}">John Doe</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+</div>
+
+<!-- JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    // Chart - Issues by Status
+    new Chart(document.getElementById('statusChart'), {
+        type: 'bar',
+        data: {
+            labels: ['Open', 'In Progress', 'Resolved', 'Closed'],
+            datasets: [{
+                data: [/*[[${openCount}]]*/ 10, /*[[${inProgressCount}]]*/ 20, /*[[${resolvedCount}]]*/ 30, /*[[${closedCount}]]*/ 15],
+                backgroundColor: ['#facc15', '#60a5fa', '#34d399', '#94a3b8'],
+                borderRadius: 6
+            }]
+        },
+        options: { responsive: true, plugins: { legend: { display: false } } }
+    });
+
+    // Chart - Issues by Priority
+    new Chart(document.getElementById('priorityChart'), {
+        type: 'pie',
+        data: {
+            labels: ['High', 'Medium', 'Low'],
+            datasets: [{
+                data: [/*[[${highPriority}]]*/ 10, /*[[${mediumPriority}]]*/ 15, /*[[${lowPriority}]]*/ 25],
+                backgroundColor: ['#ef4444', '#facc15', '#22c55e']
+            }]
+        },
+        options: { responsive: true }
+    });
+});
+</script>
+</body>
+</html>

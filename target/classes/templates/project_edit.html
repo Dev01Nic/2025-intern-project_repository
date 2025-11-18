@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Project</title>
+    <style>
+        body { font-family: 'Poppins', sans-serif; background: #f9fafb; margin: 0; padding: 20px; }
+        .form-container { max-width: 600px; margin: auto; background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        h2 { margin-bottom: 20px; color: #2563eb; }
+        label { display: block; margin-bottom: 8px; font-weight: 500; }
+        input, select, textarea { width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 6px; }
+        button { background: #2563eb; color: #fff; padding: 10px 16px; border: none; border-radius: 6px; cursor: pointer; font-weight: 500; }
+        button:hover { background: #1e40af; }
+    </style>
+</head>
+<body>
+<div class="form-container">
+    <h2>Edit Project</h2>
+    <form th:action="@{/hod/projects/update/{id}(id=${project.projectId})}" method="post">
+        
+        <!-- Project Name -->
+        <label>Project Name</label>
+        <input type="text" name="projectName" th:value="${project.projectName}" required>
+
+        <!-- Department -->
+        <label>Department</label>
+        <select name="departmentId">
+            <option th:each="dept : ${departments}" 
+                    th:value="${dept.deptId}" 
+                    th:selected="${dept.deptId == project.department?.deptId}" 
+                    th:text="${dept.deptName}">
+            </option>
+        </select>
+
+        <!-- Project Manager -->
+        <label>Project Manager</label>
+        <select name="projectManagerId">
+            <option th:each="user : ${users}" 
+                    th:value="${user.id}" 
+                    th:selected="${project.projectManager != null and user.id == project.projectManager.id}" 
+                    th:text="${user.username}">
+            </option>
+        </select>
+
+        <!-- Created By -->
+        <label>Created By</label>
+        <select name="createdById">
+            <option th:each="user : ${users}" 
+                    th:value="${user.id}" 
+                    th:selected="${project.createdBy != null and user.id == project.createdBy.id}" 
+                    th:text="${user.username}">
+            </option>
+        </select>
+
+        <!-- Start Date -->
+        <label>Start Date</label>
+        <input type="date" name="startDate" th:value="${project.startDate}">
+
+        <!-- Status -->
+        <label>Status</label>
+        <select name="statusId" required>
+            <option th:value="New" th:selected="${project.statusId == 'New'}">New</option>
+            <option th:value="Ongoing" th:selected="${project.statusId == 'Ongoing'}">Ongoing</option>
+            <option th:value="Completed" th:selected="${project.statusId == 'Completed'}">Completed</option>
+        </select>
+
+        <!-- Category -->
+        <label>Category</label>
+<select name="categoryId" required>
+    <option value="" disabled>Select Category</option>
+    <option th:each="cat : ${categories}" 
+            th:value="${cat.categoryId}" 
+            th:text="${cat.categoryName}" 
+            th:selected="${project.category != null and cat.categoryId == project.category.categoryId}">
+    </option>
+</select>
+
+        <!-- Technologies Used -->
+        <label>Technologies Used</label>
+        <textarea name="technologiesUsed" rows="3" th:text="${project.technologiesUsed}"></textarea>
+
+        <!-- Priority -->
+        <label>Priority</label>
+        <select name="priority" required>
+            <option th:value="Low" th:selected="${project.priority == 'Low'}">Low</option>
+            <option th:value="Medium" th:selected="${project.priority == 'Medium'}">Medium</option>
+            <option th:value="High" th:selected="${project.priority == 'High'}">High</option>
+        </select>
+
+        <!-- Description -->
+        <label>Description</label>
+        <textarea name="description" rows="4" th:text="${project.description}"></textarea>
+
+        <!-- Submit -->
+        <button type="submit">Update Project</button>
+    </form>
+</div>
+</body>
+</html>

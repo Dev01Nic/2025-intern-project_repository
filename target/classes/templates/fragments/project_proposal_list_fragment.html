@@ -1,0 +1,100 @@
+<div th:fragment="projectProposalListFragment">
+    <div class="card shadow-lg mt-4">
+        <div class="card-body">
+            <h2 class="h5 text-primary border-bottom pb-2 mb-3">Project Proposals</h2>
+
+            <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#proposalModal">
+                + New Project Proposal
+            </button>
+
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped align-middle">
+                    <thead class="table-primary">
+                        <tr>
+                            <th>ID</th>
+                            <th>Title</th>
+                            <th>Date</th>
+                            <th>Submitted By</th>
+                            <th>Acceptance Letter</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="proposal : ${projectProposals}">
+                            <td th:text="${proposal.id}"></td>
+                            <td th:text="${proposal.proposalTitle}"></td>
+                            <td th:text="${proposal.proposalDate}"></td>
+                            <td th:text="${proposal.submittedBy?.name}"></td>
+                            <td><span th:text="${proposal.acceptanceLetter != null ? 'Issued' : 'Pending'}"></span></td>
+                            <td>
+                                <div class="dropdown dropend">
+                                    <button class="btn btn-sm btn-light" type="button"
+                                            th:id="'actionMenuButton_' + ${proposal.id}"
+                                            data-bs-toggle="dropdown" aria-expanded="false">⋮</button>
+                                    <ul class="dropdown-menu" th:aria-labelledby="'actionMenuButton_' + ${proposal.id}">
+                                        <li>
+                                            <a class="dropdown-item" href="#"
+                                               data-bs-toggle="modal"
+                                               th:data-bs-target="'#viewProposalModal_' + ${proposal.id}">
+                                                View
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item text-primary" href="#"
+                                               data-bs-toggle="modal"
+                                               th:data-bs-target="'#editProposalModal_' + ${proposal.id}">
+                                                Edit
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item text-danger"
+                                               th:href="@{/proposals/delete/{id}(id=${proposal.id})}"
+                                               onclick="return confirm('Delete this proposal?');">Delete</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- New Proposal Modal -->
+    <div class="modal fade" id="proposalModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content shadow rounded-3">
+                <div class="modal-body">
+                    <div th:replace="fragments/project_proposal_fragment :: projectProposalFormFragment"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- View Modals -->
+    <div th:each="proposal : ${projectProposals}"
+         th:id="'viewProposalModal_' + ${proposal.id}"
+         class="modal fade" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content shadow rounded-3">
+                <div class="modal-body">
+                    <div th:replace="fragments/project_proposal_view_fragment :: project_proposal_view_fragment"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ✅ Edit Modals -->
+    <div th:each="proposal : ${projectProposals}"
+         th:id="'editProposalModal_' + ${proposal.id}"
+         class="modal fade" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content shadow rounded-3">
+                <div class="modal-body">
+                    <div th:replace="fragments/project_proposal_edit_fragment :: projectProposalEditFragment(${proposal})"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

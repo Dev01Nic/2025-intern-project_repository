@@ -1,0 +1,76 @@
+<div th:fragment="hostingEditFragment(host)">
+    <div class="card shadow-lg mt-4">
+        <div class="card-body">
+            <h2 class="h5 text-primary border-bottom pb-2 mb-3"
+                th:text="${host.hostingId != null} ? 'Edit Hosting' : 'New Hosting'">
+                Hosting Form
+            </h2>
+
+            <form th:action="@{/hostings/update/{id}(id=${host.hostingId})}" 
+                  th:object="${host}" method="post" class="row g-3">
+
+                <!-- Hosting Type -->
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Hosting Type</label>
+                    <input type="text" name="hostingType" th:value="${host.hostingType}" class="form-control" required/>
+                </div>
+
+                <!-- Description -->
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Description</label>
+                    <input type="text" name="description" th:value="${host.description}" class="form-control"/>
+                </div>
+
+                <!-- Public IP -->
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Public IP</label>
+                    <input type="text" name="publicIp" th:value="${host.publicIp}" class="form-control"/>
+                </div>
+
+                <!-- Private IP -->
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Private IP</label>
+                    <input type="text" name="privateIp" th:value="${host.privateIp}" class="form-control"/>
+                </div>
+
+                <!-- Domain Name -->
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Domain Name</label>
+                    <input type="text" name="domainName" th:value="${host.domainName}" class="form-control"/>
+                </div>
+
+                <!-- Operating System -->
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Operating System</label>
+                    <input type="text" name="operatingSystem" th:value="${host.operatingSystem}" class="form-control"/>
+                </div>
+
+                <!-- Server Specifications -->
+                <div class="col-md-12">
+                    <label class="form-label fw-semibold">Server Specifications</label>
+                    <textarea name="serverSpecs" class="form-control" th:text="${host.serverSpecs}" rows="2"></textarea>
+                </div>
+
+                <!-- Project Name (editable text) -->
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Project Name</label>
+                    <input type="text" name="projectName" th:value="${host.project.projectName}" class="form-control" required/>
+                </div>
+
+                <!-- Data Center Name (editable text) -->
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Data Center Name</label>
+                    <input type="text" name="dataCenterName" th:value="${host.dataCenter.name}" class="form-control" required/>
+                </div>
+
+                <!-- Buttons -->
+                <div class="col-12 d-flex justify-content-between mt-3">
+                    <a th:href="@{/hostings/list}" class="btn btn-secondary">Cancel</a>
+                    <button type="submit" class="btn btn-success"
+                            th:text="${host.hostingId != null} ? 'Update' : 'Create'"></button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>

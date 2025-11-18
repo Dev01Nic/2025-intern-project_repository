@@ -1,0 +1,75 @@
+<div th:fragment="projectManualFormFragment">
+    <div class="card shadow-lg mt-4">
+        <div class="card-body">
+            <h2 class="h5 text-primary border-bottom pb-2 mb-3">Project Manual Form</h2>
+
+            <form th:action="@{/manuals/save}" th:object="${manual}" method="post" class="row g-3">
+
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Version</label>
+                    <input type="text" th:field="*{version}" class="form-control"/>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Title</label>
+                    <input type="text" th:field="*{title}" class="form-control" required/>
+                </div>
+
+                <div class="col-md-12">
+                    <label class="form-label fw-semibold">Description</label>
+                    <textarea th:field="*{description}" class="form-control"></textarea>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Submitted Date</label>
+                    <input type="date" th:field="*{submittedDate}" class="form-control"/>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Approved Date</label>
+                    <input type="date" th:field="*{approvedDate}" class="form-control"/>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Status</label>
+                    <select th:field="*{status}" class="form-select">
+                        <option value="Draft">Draft</option>
+                        <option value="Submitted">Submitted</option>
+                        <option value="Approved">Approved</option>
+                        <option value="Rejected">Rejected</option>
+                    </select>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Project</label>
+                    <select th:field="*{project}" class="form-select" required>
+                        <option th:value="${project}" th:text="${project.projectName}" selected></option>
+                    </select>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Submitted By</label>
+                    <select th:field="*{submittedBy}" class="form-select" required>
+                        <option th:each="usr : ${users}" th:value="${usr}" th:text="${usr.name}"></option>
+                    </select>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Approved By</label>
+                    <select th:field="*{approvedBy}" class="form-select">
+                        <option th:each="usr : ${users}" th:value="${usr}" th:text="${usr.name}"></option>
+                    </select>
+                </div>
+                
+                 <div class="col-md-6">
+                    <label class="form-label fw-semibold">File Path</label>
+                  <input type="file" th:field="*{filePath}" accept="application/pdf" required/>
+                </div>
+
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary px-4">Save Project Manual</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

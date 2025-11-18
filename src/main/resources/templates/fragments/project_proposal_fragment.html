@@ -1,0 +1,43 @@
+<div th:fragment="projectProposalFormFragment">
+    <div class="card shadow-lg mt-4">
+        <div class="card-body">
+            <h2 class="h5 text-primary border-bottom pb-2 mb-3">Project Proposal Form</h2>
+
+            <form th:action="@{/proposals/save}" th:object="${proposal}" method="post" class="row g-3">
+
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Proposal Title</label>
+                    <input type="text" th:field="*{proposalTitle}" class="form-control" required/>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Proposal Date</label>
+                    <input type="date" th:field="*{proposalDate}" class="form-control"/>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Project</label>
+                    <select th:field="*{project}" class="form-select" required>
+                         <option th:value="${project}" th:text="${project.projectName}" selected></option>
+                    </select>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Submitted By</label>
+                    <select th:field="*{submittedBy}" class="form-select" required>
+                        <option th:each="usr : ${users}" th:value="${usr}" th:text="${usr.username}"></option>
+                    </select>
+                </div>
+                
+                 <div class="col-md-6">
+                    <label class="form-label fw-semibold">File Path</label>
+                  <input type="file" th:field="*{filePath}" accept="application/pdf" required/>
+                </div>
+
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary px-4">Save Proposal</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

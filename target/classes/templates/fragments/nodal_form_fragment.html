@@ -1,0 +1,76 @@
+<div th:fragment="nodalFormFragment">
+    <div class="card shadow-lg mt-4">
+        <div class="card-body">
+            <h2 class="h5 text-primary border-bottom pb-2 mb-3">Nodal Officer Form</h2>
+
+            <form th:action="@{/nodal/create}" th:object="${nodalUser}" method="post" class="row g-3">
+                <input type="hidden" th:field="*{id}"/> <!-- For edit -->
+
+                <!-- Name -->
+                <div class="col-md-6">
+                    <label for="nodalName" class="form-label fw-semibold">Name</label>
+                    <input type="text" id="nodalName" th:field="*{name}" class="form-control" placeholder="Full Name" required>
+                </div>
+
+                <!-- Email -->
+                <div class="col-md-6">
+                    <label for="nodalEmail" class="form-label fw-semibold">Email</label>
+                    <input type="email" id="nodalEmail" th:field="*{email}" class="form-control" placeholder="Email Address" required>
+                </div>
+
+                <!-- Phone -->
+                <div class="col-md-6">
+                    <label for="nodalPhone" class="form-label fw-semibold">Phone Number</label>
+                    <input type="text" id="nodalPhone" th:field="*{phoneNo}" class="form-control" placeholder="Phone Number">
+                </div>
+
+                <!-- Username -->
+                <div class="col-md-6">
+                    <label for="nodalUsername" class="form-label fw-semibold">Username</label>
+                    <input type="text" id="nodalUsername" th:field="*{username}" class="form-control" placeholder="Username" required>
+                </div>
+
+                <!-- Password -->
+                <div class="col-md-6">
+                    <label for="nodalPassword" class="form-label fw-semibold">Password</label>
+                    <input type="password" id="nodalPassword" th:field="*{password}" class="form-control" placeholder="Password" required>
+                </div>
+
+                <!-- Designation -->
+                <div class="col-md-6">
+                    <label for="nodalDesignation" class="form-label fw-semibold">Designation</label>
+                    <input type="text" id="nodalDesignation" th:field="*{designation}" class="form-control" placeholder="Designation">
+                </div>
+
+                <!-- Department -->
+                <div class="col-md-6">
+                    <label for="nodalDepartment" class="form-label fw-semibold">Department</label>
+                    <select id="nodalDepartment" th:field="*{department}" class="form-select" required>
+                        <option th:each="dept : ${departments}" 
+                                th:value="${dept}" 
+                                th:text="${dept.deptName}"
+                                th:selected="${nodalUser.department != null and dept.deptId == nodalUser.department.deptId}">
+                        </option>
+                    </select>
+                </div>
+
+                <!-- Role -->
+                <div class="col-md-6">
+                    <label for="nodalRole" class="form-label fw-semibold">Role</label>
+                    <select id="nodalRole" th:field="*{role}" class="form-select" required>
+                        <option th:each="role : ${roles}" 
+                                th:value="${role}" 
+                                th:text="${role.roleName}"
+                                th:selected="${nodalUser.role != null and role.roleId == nodalUser.role.roleId}">
+                        </option>
+                    </select>
+                </div>
+
+                <!-- Submit -->
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary px-4">Save Nodal Officer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

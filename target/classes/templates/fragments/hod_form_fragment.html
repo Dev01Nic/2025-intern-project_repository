@@ -1,0 +1,76 @@
+<div th:fragment="hodFormFragment">
+    <div class="card shadow-lg mt-4">
+        <div class="card-body">
+            <h2 class="h5 text-primary border-bottom pb-2 mb-3">HOD Form</h2>
+
+            <form th:action="@{/hod/create}" th:object="${hodUser}" method="post" class="row g-3">
+                <input type="hidden" th:field="*{id}"/> <!-- For edit -->
+
+                <!-- Name -->
+                <div class="col-md-6">
+                    <label for="hodName" class="form-label fw-semibold">Name</label>
+                    <input type="text" id="hodName" th:field="*{name}" class="form-control" placeholder="Full Name" required>
+                </div>
+
+                <!-- Email -->
+                <div class="col-md-6">
+                    <label for="hodEmail" class="form-label fw-semibold">Email</label>
+                    <input type="email" id="hodEmail" th:field="*{email}" class="form-control" placeholder="Email Address" required>
+                </div>
+
+                <!-- Phone -->
+                <div class="col-md-6">
+                    <label for="hodPhone" class="form-label fw-semibold">Phone Number</label>
+                    <input type="text" id="hodPhone" th:field="*{phoneNo}" class="form-control" placeholder="Phone Number">
+                </div>
+
+                <!-- Username -->
+                <div class="col-md-6">
+                    <label for="hodUsername" class="form-label fw-semibold">Username</label>
+                    <input type="text" id="hodUsername" th:field="*{username}" class="form-control" placeholder="Username" required>
+                </div>
+
+                <!-- Password -->
+                <div class="col-md-6">
+                    <label for="hodPassword" class="form-label fw-semibold">Password</label>
+                    <input type="password" id="hodPassword" th:field="*{password}" class="form-control" placeholder="Password" required>
+                </div>
+
+                <!-- Designation -->
+                <div class="col-md-6">
+                    <label for="hodDesignation" class="form-label fw-semibold">Designation</label>
+                    <input type="text" id="hodDesignation" th:field="*{designation}" class="form-control" placeholder="Designation">
+                </div>
+
+                <!-- Department -->
+                <div class="col-md-6">
+                    <label for="hodDepartment" class="form-label fw-semibold">Department</label>
+                    <select id="hodDepartment" th:field="*{department}" class="form-select" required>
+                        <option th:each="dept : ${departments}"
+                                th:value="${dept}"
+                                th:text="${dept.deptName}"
+                                th:selected="${hodUser.department != null and dept.deptId == hodUser.department.deptId}">
+                        </option>
+                    </select>
+                </div>
+
+                <!-- Role -->
+                <div class="col-md-6">
+                    <label for="hodRole" class="form-label fw-semibold">Role</label>
+                    <select id="hodRole" th:field="*{role}" class="form-select" required>
+                        <option th:each="role : ${roles}"
+                                th:value="${role}"
+                                th:text="${role.roleName}"
+                                th:selected="${hodUser.role != null and role.roleId == hodUser.role.roleId}">
+                        </option>
+                    </select>
+                </div>
+
+                <!-- Submit -->
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary px-4">Save HOD</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,56 @@
+<div th:fragment="projectProposalEditFragment(proposal)">
+    <div class="card shadow-lg mt-4">
+        <div class="card-body">
+            <h2 class="h5 text-primary border-bottom pb-2 mb-3"
+                th:text="${proposal.id != null} ? 'Edit Project Proposal' : 'New Project Proposal'">
+                Project Proposal Form
+            </h2>
+
+            <form th:action="@{/proposals/update/{id}(id=${proposal.id})}" 
+                  th:object="${proposal}" method="post" enctype="multipart/form-data" class="row g-3">
+
+                <!-- Proposal Title -->
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Proposal Title</label>
+                    <input type="text" name="proposalTitle" th:value="${proposal.proposalTitle}" class="form-control" required/>
+                </div>
+
+                <!-- Proposal Date -->
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Proposal Date</label>
+                    <input type="date" name="proposalDate" th:value="${proposal.proposalDate}" class="form-control" required/>
+                </div>
+
+                <!-- Project Name (editable text) -->
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Project Name</label>
+                    <input type="text" name="projectName" th:value="${proposal.project.projectName}" class="form-control" required/>
+                </div>
+
+                <!-- Submitted By (editable text) -->
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Submitted By</label>
+                    <input type="text" name="submittedBy" th:value="${proposal.submittedBy.username}" class="form-control" required/>
+                </div>
+
+                <!-- File Upload -->
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Upload PDF</label>
+                    <input type="file" id="file" name="file" class="form-control" accept="application/pdf">
+                    <small th:if="${proposal.filePath}" class="text-muted">
+                        Current file:
+                        <a th:href="@{${proposal.filePath}}" target="_blank">View PDF</a>
+                    </small>
+                </div>
+
+                <!-- Buttons -->
+                <div class="col-12 d-flex justify-content-between mt-3">
+                    <a th:href="@{/proposals/list}" class="btn btn-secondary">Cancel</a>
+                    <button type="submit" class="btn btn-primary"
+                            th:text="${proposal.id != null} ? 'Update' : 'Create'"></button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,113 @@
+<div th:fragment="requestLetterListFragment">
+    <div class="card shadow-lg mt-4">
+        <div class="card-body">
+            <h2 class="h5 text-primary border-bottom pb-2 mb-3">Request Letters</h2>
+
+            <!-- Bootstrap button -->
+            <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#reqLetterModal">
+                + New Request Letter
+            </button>
+
+            <!-- Responsive table -->
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped align-middle">
+                    <thead class="table-primary">
+                        <tr>
+                            <th>ID</th>
+                            <th>Subject</th>
+                            <th>Date</th>
+                            <th>Sender</th>
+                            <th>Designation</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="letter : ${requestLetters}">
+                            <td th:text="${letter.id}"></td>
+                            <td th:text="${letter.subject}"></td>
+                            <td th:text="${letter.letterDate}"></td>
+                            <td th:text="${letter.senderName}"></td>
+                            <td th:text="${letter.senderDesignation}"></td>
+                           <!--   <td>
+                                <a th:if="${letter.filePath}" th:href="@{${letter.filePath}}" target="_blank"
+                                   class="btn btn-sm btn-outline-primary">View</a>
+                                <span th:unless="${letter.filePath}" class="text-muted">-</span>
+                            </td>-->
+                            <td th:text="${letter.status}"></td>
+  <td>
+    <div class="dropdown dropend">
+        <button class="btn btn-sm btn-light" type="button" id="actionMenuButton"
+                data-bs-toggle="dropdown" aria-expanded="false">
+            ⋮
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="actionMenuButton">
+            <!-- View Letter -->
+            <li>
+                <a class="dropdown-item" href="#" 
+                   data-bs-toggle="modal" 
+                   th:data-bs-target="'#viewLetterModal_' + ${letter.id}">
+                    View
+                </a>
+            </li>
+  <li>
+    <a class="dropdown-item text-primary" href="#" 
+       data-bs-toggle="modal" 
+       th:data-bs-target="'#editLetterModal_' + ${letter.id}">
+        Edit
+    </a>
+</li>
+
+
+            <li>
+                <a class="dropdown-item text-danger" 
+                   th:href="@{/request-letters/delete/{id}(id=${letter.id})}"
+                   onclick="return confirm('Are you sure you want to delete this letter?');">
+                     Delete
+                </a>
+            </li>
+        </ul>
+    </div>
+</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap Modal -->
+    <div class="modal fade" id="reqLetterModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content shadow rounded-3">
+                <div class="modal-body">
+                    <div th:replace="fragments/request_letter_fragment :: requestLetterFormFragment"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+     <div th:each="letter : ${requestLetters}" 
+         th:id="'viewLetterModal_' + ${letter.id}" 
+         class="modal fade" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content shadow rounded-3">
+                <div class="modal-body">
+                    <div th:replace="fragments/request_letter_view_fragment :: request_letter_view_fragment"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+       <!-- Edit Modals -->
+ <div th:each="letter : ${requestLetters}" 
+     th:id="'editLetterModal_' + ${letter.id}" 
+     class="modal fade" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content shadow rounded-3">
+            <div class="modal-body">
+             <div th:replace="fragments/request_letter_edit_fragment :: requestLetterEditFragment(${letter})"></div>
+
+            </div>
+        </div>
+    </div>
+</div>
+    </div>

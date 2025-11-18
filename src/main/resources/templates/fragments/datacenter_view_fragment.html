@@ -1,0 +1,54 @@
+<!-- File: fragments/datacenter_view_fragment.html -->
+<div th:fragment="datacenter_view_fragment">
+    <div class="card shadow-lg">
+        <div class="card-header bg-primary text-white">
+            <h4>Data Center Details</h4>
+        </div>
+        <div class="card-body">
+
+            <dl class="row">
+                <dt class="col-sm-3">ID</dt>
+                <dd class="col-sm-9" th:text="${datacenter.datacenterId}"></dd>
+
+                <dt class="col-sm-3">Name</dt>
+                <dd class="col-sm-9" th:text="${datacenter.name}"></dd>
+
+                <dt class="col-sm-3">Location</dt>
+                <dd class="col-sm-9" th:text="${datacenter.location}"></dd>
+
+                <dt class="col-sm-3">Type</dt>
+                <dd class="col-sm-9" th:text="${datacenter.type}"></dd>
+
+                <dt class="col-sm-3">Capacity</dt>
+                <dd class="col-sm-9" th:text="${datacenter.capacity}"></dd>
+
+                <dt class="col-sm-3">Contact Person</dt>
+                <dd class="col-sm-9" th:text="${datacenter.contactPerson}"></dd>
+
+                <dt class="col-sm-3">Contact No</dt>
+                <dd class="col-sm-9" th:text="${datacenter.contactNo}"></dd>
+
+                <dt class="col-sm-3">Email</dt>
+                <dd class="col-sm-9" th:text="${datacenter.email}"></dd>
+
+                <dt class="col-sm-3">Status</dt>
+                <dd class="col-sm-9" th:text="${datacenter.status}"></dd>
+
+                <dt class="col-sm-3">Established Date</dt>
+                <dd class="col-sm-9" th:text="${datacenter.establishedDate}"></dd>
+
+                <dt class="col-sm-3">Description</dt>
+                <dd class="col-sm-9" th:text="${datacenter.description}"></dd>
+            </dl>
+
+            <div class="d-flex gap-2 mt-3">
+              <!--    <a th:href="@{'/datacenters/edit/' + ${datacenter.datacenterId}}" class="btn btn-primary">Edit</a>
+                <form th:action="@{'/datacenters/delete/' + ${datacenter.datacenterId}}" method="post"
+                      th:onsubmit="return confirm('Are you sure you want to delete this datacenter?');">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>-->
+                <a th:href="@{/datacenters}" class="btn btn-secondary">Back to List</a>
+            </div>
+        </div>
+    </div>
+</div>

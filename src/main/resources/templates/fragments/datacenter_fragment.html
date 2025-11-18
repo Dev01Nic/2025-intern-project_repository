@@ -1,0 +1,117 @@
+<div th:fragment="datacenterListFragment">
+    <div class="card shadow-lg mt-4">
+        <div class="card-body">
+            <h2 class="h5 text-primary border-bottom pb-2 mb-3">Data Centers</h2>
+
+            <!-- Bootstrap button -->
+            <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#datacenterModal">
+                + Add New Data Center
+            </button>
+
+            <!-- Responsive table -->
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped align-middle">
+                    <thead class="table-primary">
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Location</th>
+                            <th>Type</th>
+                            <th>Capacity</th>
+                            <th>Contact Person</th>
+                            <th>Contact No</th>
+                            <th>Status</th>
+                            <th>Established Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="datacenter : ${datacenters}">
+                            <td th:text="${datacenter.datacenterId}"></td>
+                            <td th:text="${datacenter.name}"></td>
+                            <td th:text="${datacenter.location}"></td>
+                            <td th:text="${datacenter.type}"></td>
+                            <td th:text="${datacenter.capacity}"></td>
+                            <td th:text="${datacenter.contactPerson}"></td>
+                            <td th:text="${datacenter.contactNo}"></td>
+                            <td th:text="${datacenter.status}"></td>
+                            <td th:text="${datacenter.establishedDate}"></td>
+                            <td>
+                                <div class="dropdown dropend">
+                                    <button class="btn btn-sm btn-light" type="button"
+                                            id="actionMenuButton-[[${datacenter.datacenterId}]]"
+                                            data-bs-toggle="dropdown" aria-expanded="false">
+                                        ⋮
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="actionMenuButton-[[${datacenter.datacenterId}]]">
+                                        <li>
+                                            <a class="dropdown-item" href="#"
+                                               data-bs-toggle="modal"
+                                               th:data-bs-target="'#viewDatacenterModal_' + ${datacenter.datacenterId}">
+                                                View Data Center
+                                            </a>
+                                        </li>
+                       <li>
+                                            <a class="dropdown-item text-primary" href="#"
+                                               data-bs-toggle="modal"
+                                               th:data-bs-target="'#editDatacenterModal_' + ${datacenter.datacenterId}">
+                                                Edit
+                                            </a>
+                                        </li>
+            <li>
+                <a class="dropdown-item text-danger" 
+                   th:href="@{/datacenters/delete/{id}(id=${datacenter.datacenterId})}"
+                   onclick="return confirm('Are you sure you want to delete this letter?');">
+                     Delete
+                </a>
+            </li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr th:if="${#lists.isEmpty(datacenters)}">
+                            <td colspan="12" class="text-center text-muted">No data centers found.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add New Data Center Modal -->
+    <div class="modal fade" id="datacenterModal" tabindex="-1" aria-labelledby="datacenterModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content shadow rounded-3">
+                <div class="modal-body">
+                    <div th:replace="fragments/datacenter_form_fragment :: datacenterFormFragment"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+ <div th:each="datacenter : ${datacenters}" 
+         th:id="'viewDatacenterModal_' + ${datacenter.datacenterId}" 
+         class="modal fade" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content shadow rounded-3">
+                <div class="modal-body">
+                    <div th:replace="fragments/datacenter_view_fragment :: datacenter_view_fragment"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+     <div th:each="datacenter : ${datacenters}" 
+         th:id="'editDatacenterModal_' + ${datacenter.datacenterId}" 
+         class="modal fade" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content shadow rounded-3">
+                <div class="modal-body">
+                    <!-- ✅ Load Edit Fragment with the current datacenter -->
+                    <div th:replace="fragments/datacenter_edit_fragment :: datacenterEditFragment(${datacenter})"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

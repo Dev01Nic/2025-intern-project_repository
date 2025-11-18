@@ -1,0 +1,114 @@
+<div th:fragment="developerEditFormFragment">
+    <div class="card shadow-lg mt-4">
+        <div class="card-body">
+            <h2 class="h5 text-primary border-bottom pb-2 mb-3">Edit Developer</h2>
+
+            <!-- Developer Dropdown -->
+            <div class="col-md-6 mb-3">
+                <label for="devSelect" class="form-label fw-semibold">Select Developer</label>
+              <select id="devSelect" class="form-select">
+    <option value="">-- Select Developer --</option>
+    <option th:each="dev : ${allDevelopers}" 
+            th:value="${dev.id}" 
+            th:text="${dev.username}">
+    </option>
+</select>
+
+            </div>
+
+            <form th:action="@{/developer/update/{id}(id=${developerUser.id})}" 
+                  th:object="${developerUser}" method="post" class="row g-3">
+                <input type="hidden" th:field="*{id}"/>
+
+                <!-- Name -->
+                <div class="col-md-6">
+                    <label for="devName" class="form-label fw-semibold">Name</label>
+                    <input type="text" id="devName" th:field="*{name}" class="form-control" readonly>
+                </div>
+
+                <!-- Email -->
+                <div class="col-md-6">
+                    <label for="devEmail" class="form-label fw-semibold">Email</label>
+                    <input type="email" id="devEmail" th:field="*{email}" class="form-control" readonly>
+                </div>
+
+                <!-- Phone -->
+                <div class="col-md-6">
+                    <label for="devPhone" class="form-label fw-semibold">Phone Number</label>
+                    <input type="text" id="devPhone" th:field="*{phoneNo}" class="form-control"readonly>
+                </div>
+
+                <!-- Password -->
+          <!--       <div class="col-md-6">
+                    <label for="devPassword" class="form-label fw-semibold">Password</label>
+                    <input type="password" id="devPassword" th:field="*{password}" class="form-control" placeholder="(hidden)" disabled>
+                </div> -->
+
+                <!-- Designation -->
+                <div class="col-md-6">
+                    <label for="devDesignation" class="form-label fw-semibold">Designation</label>
+                    <input type="text" id="devDesignation" th:field="*{designation}" class="form-control" readonly>
+                </div>
+
+                <!-- Department -->
+                <div class="col-md-6">
+                    <label for="devDepartment" class="form-label fw-semibold">Department</label>
+                    <select id="devDepartment" th:field="*{department}" class="form-select" disabled>
+                        <option th:each="dept : ${departments}"
+                                th:value="${dept.deptId}"
+                                th:text="${dept.deptName}">
+                        </option>
+                    </select>
+                </div>
+
+                <!-- Role -->
+                <div class="col-md-6">
+                    <label for="devRole" class="form-label fw-semibold">Role</label>
+                    <select id="devRole" th:field="*{role}" class="form-select" disabled>
+                        <option th:each="role : ${roles}"
+                                th:value="${role.roleId}"
+                                th:text="${role.roleName}">
+                        </option>
+                    </select>
+                </div>
+
+                <!-- Submit -->
+                <div class="col-12">
+                    <button type="submit" class="btn btn-warning px-4">Assign Developer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- JS to auto-populate fields -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const devSelect = document.getElementById('devSelect');
+
+        devSelect.addEventListener('change', function() {
+            const devId = this.value;
+            if (!devId) return;
+
+            fetch('/developer/details/' + devId)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('devName').value = data.name || '';
+                    document.getElementById('devEmail').value = data.email || '';
+                    document.getElementById('devPhone').value = data.phoneNo || '';
+                    document.getElementById('devUsername').value = data.username || '';
+                    document.getElementById('devPassword').value = ''; // blank for security
+                    document.getElementById('devDesignation').value = data.designation || '';
+
+                    // Department dropdown
+                    const deptSelect = document.getElementById('devDepartment');
+                    if (data.departmentId) deptSelect.value = data.departmentId;
+
+                    // Role dropdown
+                    const roleSelect = document.getElementById('devRole');
+                    if (data.roleId) roleSelect.value = data.roleId;
+                })
+                .catch(error => console.error('Error fetching developer details:', error));
+        });
+    });
+    </script>
+</div>

@@ -1,0 +1,63 @@
+<div th:fragment="hostingFormFragment">
+    <div class="card shadow-lg mt-4">
+        <div class="card-body">
+            <h2 class="h5 text-primary border-bottom pb-2 mb-3">Hosting Form</h2>
+
+            <form th:action="@{/hosting/save}" th:object="${hosting}" method="post" class="row g-3">
+
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Hosting Type</label>
+                    <input type="text" th:field="*{hostingType}" class="form-control" placeholder="Enter hosting type" required />
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Public IP</label>
+                    <input type="text" th:field="*{publicIp}" class="form-control" placeholder="Enter public IP" />
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Private IP</label>
+                    <input type="text" th:field="*{privateIp}" class="form-control" placeholder="Enter private IP" />
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Domain Name</label>
+                    <input type="text" th:field="*{domainName}" class="form-control" placeholder="Enter domain name" />
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Operating System</label>
+                    <input type="text" th:field="*{operatingSystem}" class="form-control" placeholder="Enter OS" />
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Project</label>
+                    <select th:field="*{project}" class="form-select" required>
+                        <option th:each="proj : ${projects}" th:value="${proj}" th:text="${proj.projectName}"></option>
+                    </select>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Data Center</label>
+                    <select th:field="*{dataCenter}" class="form-select" required>
+                        <option th:each="dc : ${dataCenters}" th:value="${dc}" th:text="${dc.dataCenterName}"></option>
+                    </select>
+                </div>
+
+                <div class="col-md-12">
+                    <label class="form-label fw-semibold">Server Specs</label>
+                    <textarea th:field="*{serverSpecs}" class="form-control" placeholder="Enter server specifications"></textarea>
+                </div>
+
+                <div class="col-md-12">
+                    <label class="form-label fw-semibold">Description</label>
+                    <textarea th:field="*{description}" class="form-control" placeholder="Enter description"></textarea>
+                </div>
+
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary px-4">Save Hosting</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

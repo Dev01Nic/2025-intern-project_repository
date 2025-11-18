@@ -1,0 +1,52 @@
+<div th:fragment="hodUsersListFragment">
+    <div class="card shadow-lg mt-4">
+        <div class="card-body">
+            <h2 class="h5 text-primary border-bottom pb-2 mb-3">HOD Users</h2>
+
+            <!--  <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#hodModal">
+                + Create New HOD
+            </button>-->
+
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped align-middle">
+                    <thead class="table-primary">
+                        <tr>
+                            <th>ID</th>
+                            <th>Username</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Designation</th>
+                            <th>Department</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="user : ${hodUsers}">
+                            <td th:text="${user.id}"></td>
+                            <td th:text="${user.username}"></td>
+                            <td th:text="${user.name}"></td>
+                            <td th:text="${user.email}"></td>
+                            <td th:text="${user.phoneNo != null ? user.phoneNo : 'N/A'}"></td>
+                            <td th:text="${user.designation != null ? user.designation : 'N/A'}"></td>
+                            <td th:text="${user.department != null ? user.department.deptName : 'N/A'}"></td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(hodUsers)}">
+                            <td colspan="7" class="text-center text-muted">No HOD users found.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap Modal -->
+   <!--   <div class="modal fade" id="hodModal" tabindex="-1" aria-labelledby="hodModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content shadow rounded-3">
+                <div class="modal-body">
+                    <div th:replace="fragments/hod_form_fragment :: hodFormFragment"></div>
+                </div>
+            </div>
+        </div>
+    </div>-->
+    </div>

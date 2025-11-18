@@ -1,0 +1,102 @@
+<div th:fragment="projectSignoffListFragment">
+    <div class="card shadow-lg mt-4">
+        <div class="card-body">
+            <h2 class="h5 text-primary border-bottom pb-2 mb-3">Project Signoffs</h2>
+
+            <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#signoffModal">
+                + New Project Signoff
+            </button>
+
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped align-middle">
+                    <thead class="table-primary">
+                        <tr>
+                            <th>ID</th>
+                            <th>Subject</th>
+                            <th>Letter Date</th>
+                            <th>Sender</th>
+                            <th>Designation</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="signoff : ${projectSignoffs}">
+                            <td th:text="${signoff.id}"></td>
+                            <td th:text="${signoff.subject}"></td>
+                            <td th:text="${signoff.letterDate}"></td>
+                            <td th:text="${signoff.senderName}"></td>
+                            <td th:text="${signoff.senderDesignation}"></td>
+                            <td th:text="${signoff.status}"></td>
+                            <td>
+                                <div class="dropdown dropend">
+                                    <button class="btn btn-sm btn-light" type="button"
+                                            th:id="'actionMenuButton_' + ${signoff.id}"
+                                            data-bs-toggle="dropdown" aria-expanded="false">⋮</button>
+                                    <ul class="dropdown-menu" th:aria-labelledby="'actionMenuButton_' + ${signoff.id}">
+                                        <li>
+                                            <a class="dropdown-item" href="#"
+                                               data-bs-toggle="modal"
+                                               th:data-bs-target="'#viewSignoffModal_' + ${signoff.id}">
+                                                View
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item text-primary" href="#"
+                                               data-bs-toggle="modal"
+                                               th:data-bs-target="'#editSignoffModal_' + ${signoff.id}">
+                                                Edit
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item text-danger"
+                                               th:href="@{/signoffs/delete/{id}(id=${signoff.id})}"
+                                               onclick="return confirm('Delete this signoff?');">Delete</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- New Signoff Modal -->
+    <div class="modal fade" id="signoffModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content shadow rounded-3">
+                <div class="modal-body">
+                    <div th:replace="fragments/project_signoff_fragment :: signoffFormFragment"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- View Modals -->
+    <div th:each="signoff : ${projectSignoffs}"
+         th:id="'viewSignoffModal_' + ${signoff.id}"
+         class="modal fade" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content shadow rounded-3">
+                <div class="modal-body">
+                    <div th:replace="fragments/project_signoff_view_fragment :: signoff_view_fragment"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ✅ Edit Modals -->
+    <div th:each="signoff : ${projectSignoffs}"
+         th:id="'editSignoffModal_' + ${signoff.id}"
+         class="modal fade" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content shadow rounded-3">
+                <div class="modal-body">
+                    <div th:replace="fragments/project_signoff_edit_fragment :: projectSignoffEditFragment(${signoff})"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

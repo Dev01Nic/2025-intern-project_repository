@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Project List</title>
+
+    <!-- Bootstrap & DataTables CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.bootstrap5.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        body { font-family: 'Poppins', sans-serif; background-color: #f9fafb; }
+        .sidebar { min-height: 100vh; background-color: #fff; border-right: 1px solid #e5e7eb; }
+        .sidebar h2 { color: #2563eb; font-weight: 600; margin-bottom: 1.5rem; }
+        .sidebar a { display: flex; align-items: center; gap: 0.5rem; color: #1e293b; padding: 0.5rem 1rem;
+                     border-radius: 0.75rem; text-decoration: none; transition: all 0.3s; }
+        .sidebar a:hover { background-color: #f1f5f9; color: #2563eb; }
+        .icon { font-size: 1.25rem; }
+        .table-box { background: #fff; padding: 1.5rem; border-radius: 0.75rem;
+                     box-shadow: 0 4px 12px rgba(0,0,0,0.06); overflow-x: auto; }
+        .date-column { 
+            width: 120px; 
+            text-align: center; 
+            white-space: nowrap;
+        }
+        /* Action Menu */
+        .action-menu { position: relative; display: inline-block; }
+        .action-btn { background: none; border: none; font-size: 1.25rem; cursor: pointer; color: #444; padding: 0 5px; }
+        .action-content { display: none; position: absolute; right: 0; background-color: #fff; min-width: 180px;
+                          box-shadow: 0px 4px 12px rgba(0,0,0,0.15); border-radius: 0.5rem; z-index: 10; }
+        .action-content a { color: #333; padding: 0.5rem 1rem; text-decoration: none; display: block; }
+        .action-content a:hover { background-color: #f5f5f5; }
+        .action-menu.show .action-content { display: block; }
+        #projectTable th, #projectTable td {
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <nav class="col-md-2 d-none d-md-block sidebar py-4 px-3">
+            <h4>HO Panel</h4>
+            <a th:href="@{/hoo}"><div class="icon">📊</div><span>Dashboard</span></a>
+            <a th:href="@{/hoo/projects/list}"><div class="icon">📁</div><span>Projects</span></a>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="col-md-10 ms-sm-auto px-4 py-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1>Project Management</h1>
+                <div class="text-end">
+                    <p class="mb-0"><strong>Head of Operations:</strong> <span th:text="${hooName}">HOO Name</span></p>
+                </div>
+            </div>
+
+            <!-- 🔎 Filter Section -->
+            <div class="row g-3 mb-3">
+                <div class="col-md-4">
+                    <select id="filterDepartment" class="form-select">
+                        <option value="">Filter by Department</option>
+                        <option th:each="dept : ${departments}"
+                                th:value="${dept.deptName}"
+                                th:text="${dept.deptName}"></option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <select id="filterCategory" class="form-select">
+                        <option value="">Filter by Category</option>
+                        <option th:each="cat : ${categories}"
+                                th:value="${cat.categoryName}"
+                                th:text="${cat.categoryName}"></option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <select id="filterStatus" class="form-select">
+                        <option value="">Filter by Status</option>
+                        <option th:each="s : ${statuses}" th:value="${s.name}" th:text="${s.name}"></option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- DataTable -->
+            <div class="table-box">
+                <table id="projectTable" class="table table-striped table-bordered align-middle" style="width:100%">
+                    <thead class="table-light">
+                        <tr>
+                            <th>ID</th>
+                            <th>Project Name</th>
+                            <th class="date-column">Start Date</th>
+                            <th>Status</th>
+                            <th>Priority</th>
+                            <th>Department</th>
+                            <th>Category</th>
+                            <th>Tools</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                   <tbody>
+    <tr th:each="project : ${projects}">
+        <td th:text="${project.projectId}"></td>
+        <td th:text="${project.projectName}"></td>
+        <td class="date-column" th:text="${project.startDate}"></td>
+        <td th:text="${project.status.name}"></td>
+        <td th:text="${project.priority != null ? project.priority.priorityName : 'N/A'}"></td>
+        <td th:text="${project.department != null ? project.department.deptName : 'N/A'}"></td>
+        <td th:text="${project.category != null ? project.category.categoryName : 'N/A'}"></td>
+        <td th:text="${project.technologiesUsed != null ? project.technologiesUsed : 'N/A'}"></td>
+ <!--         <td th:text="${project.projectManager != null ? project.projectManager.name : 'N/A'}"></td>-->
+        <td>
+            <button class="btn btn-sm btn-primary"
+                    data-bs-toggle="modal"
+                    data-bs-target="#viewProjectModal"
+                    th:attr="data-id=${project.projectId},
+                             data-name=${project.projectName},
+                             data-desc=${project.description},
+                             data-start=${project.startDate},
+                             data-status=${project.status.name},
+                             data-tech=${project.technologiesUsed},
+                             data-priority=${project.priority != null ? project.priority.priorityName : 'N/A'},
+                             data-dept=${project.department != null ? project.department.deptName : 'N/A'},
+                             data-cat=${project.category != null ? project.category.categoryName : 'N/A'},
+                             data-created=${project.createdBy != null ? project.createdBy.name : 'N/A'},
+                             data-pm=${project.projectManager != null ? project.projectManager.name : 'N/A'},
+                             data-hoo=${project.hoo != null ? project.hoo.name : 'N/A'},
+                             data-hod=${project.hod != null ? project.hod.name : 'N/A'},
+                             data-officer=${project.assistingOfficer != null ? project.assistingOfficer.name : 'N/A'}">
+                View
+            </button>
+        </td>
+    </tr>
+</tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+</div>
+
+<!-- View Project Modal -->
+<div class="modal fade" id="viewProjectModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">Project Details</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <dl class="row">
+                    <dt class="col-sm-4">Project ID</dt>
+                    <dd class="col-sm-8" id="m-id"></dd>
+
+                    <dt class="col-sm-4">Project Name</dt>
+                    <dd class="col-sm-8" id="m-name"></dd>
+
+                    <dt class="col-sm-4">Description</dt>
+                    <dd class="col-sm-8" id="m-desc"></dd>
+
+                    <dt class="col-sm-4">Start Date</dt>
+                    <dd class="col-sm-8" id="m-start"></dd>
+
+                    <dt class="col-sm-4">Status</dt>
+                    <dd class="col-sm-8" id="m-status"></dd>
+
+                    <dt class="col-sm-4">Technologies Used</dt>
+                    <dd class="col-sm-8" id="m-tech"></dd>
+
+                    <dt class="col-sm-4">Priority</dt>
+                    <dd class="col-sm-8" id="m-priority"></dd>
+
+                    <dt class="col-sm-4">Department</dt>
+                    <dd class="col-sm-8" id="m-dept"></dd>
+
+                    <dt class="col-sm-4">Category</dt>
+                    <dd class="col-sm-8" id="m-cat"></dd>
+
+                    <dt class="col-sm-4">Created By</dt>
+                    <dd class="col-sm-8" id="m-created"></dd>
+
+                    <dt class="col-sm-4">Project Manager</dt>
+                    <dd class="col-sm-8" id="m-pm"></dd>
+
+                    <dt class="col-sm-4">Head of Office (HOO)</dt>
+                    <dd class="col-sm-8" id="m-hoo"></dd>
+
+                    <dt class="col-sm-4">Head of Department (HOD)</dt>
+                    <dd class="col-sm-8" id="m-hod"></dd>
+
+                    <dt class="col-sm-4">Assisting Officer</dt>
+                    <dd class="col-sm-8" id="m-officer"></dd>
+                </dl>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JS Libraries -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
+<script src="https://cdn.datatables.net/2.0.8/js/dataTables.bootstrap5.js"></script>
+
+<script>
+$(document).ready(function () {
+    // Initialize DataTable
+    const table = $('#projectTable').DataTable({
+        pageLength: 10,
+        lengthMenu: [5, 10, 25, 50],
+        columnDefs: [
+            { targets: 2, className: 'date-column' } // Apply to Start Date column (index 2)
+        ]
+    });
+
+    // 🔎 Filter logic
+    $('#filterDepartment').on('change', function () {
+        table.column(5).search(this.value).draw(); // Department column index = 5
+    });
+    $('#filterCategory').on('change', function () {
+        table.column(6).search(this.value).draw(); // Category column index = 6
+    });
+    $('#filterStatus').on('change', function () {
+        table.column(3).search(this.value).draw(); // Status column index = 3
+    });
+
+    // Action menu toggle
+    document.addEventListener("click", function(event) {
+        if (event.target.matches(".action-btn")) {
+            const menu = event.target.closest(".action-menu");
+            document.querySelectorAll(".action-menu").forEach(m => m !== menu && m.classList.remove("show"));
+            menu.classList.toggle("show");
+        } else if (!event.target.closest(".action-menu")) {
+            document.querySelectorAll(".action-menu").forEach(m => m.classList.remove("show"));
+        }
+    });
+
+    // View Modal Data Fill
+    const viewModal = document.getElementById('viewProjectModal');
+    viewModal.addEventListener('show.bs.modal', function (event) {
+        const button = event.relatedTarget;
+        document.getElementById('m-id').textContent = button.getAttribute('data-id');
+        document.getElementById('m-name').textContent = button.getAttribute('data-name');
+        document.getElementById('m-desc').textContent = button.getAttribute('data-desc');
+        document.getElementById('m-start').textContent = button.getAttribute('data-start');
+        document.getElementById('m-status').textContent = button.getAttribute('data-status');
+        document.getElementById('m-tech').textContent = button.getAttribute('data-tech');
+        document.getElementById('m-priority').textContent = button.getAttribute('data-priority');
+        document.getElementById('m-dept').textContent = button.getAttribute('data-dept');
+        document.getElementById('m-cat').textContent = button.getAttribute('data-cat');
+        document.getElementById('m-created').textContent = button.getAttribute('data-created');
+        document.getElementById('m-pm').textContent = button.getAttribute('data-pm');
+        document.getElementById('m-hoo').textContent = button.getAttribute('data-hoo');
+        document.getElementById('m-hod').textContent = button.getAttribute('data-hod');
+        document.getElementById('m-officer').textContent = button.getAttribute('data-officer');
+    });
+});
+</script>
+</body>
+</html>

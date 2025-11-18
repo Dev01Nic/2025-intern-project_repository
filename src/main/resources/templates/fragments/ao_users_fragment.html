@@ -1,0 +1,68 @@
+<div th:fragment="aoUsersFragment">
+    <div class="card shadow-lg mt-4">
+        <div class="card-body">
+            <h2 class="h5 text-primary border-bottom pb-2 mb-3">Assisting Officers</h2>
+
+            <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#aoModal">
+                + Assign AO
+            </button>
+
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped align-middle">
+                    <thead class="table-primary">
+                        <tr>
+                            <th>ID</th>
+                            <th>Username</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Designation</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="user : ${aoUsers}">
+                            <td th:text="${user.id}"></td>
+                            <td th:text="${user.username}"></td>
+                            <td th:text="${user.name}"></td>
+                            <td th:text="${user.email}"></td>
+                            <td th:text="${user.phoneNo != null ? user.phoneNo : 'N/A'}"></td>
+                            <td th:text="${user.designation != null ? user.designation : 'N/A'}"></td>
+                            <td>
+                                <div class="dropdown dropend">
+                                    <button class="btn btn-sm btn-light" type="button"
+                                            th:id="'actionMenuButton_' + ${user.id}"
+                                            data-bs-toggle="dropdown" aria-expanded="false">
+                                        ⋮
+                                    </button>
+                                    <ul class="dropdown-menu" th:aria-labelledby="'actionMenuButton_' + ${user.id}">
+                                        <li>
+                                            <a class="dropdown-item"
+                                               th:href="@{/aofficer/edit/{id}(id=${user.id})}">
+                                               Edit AO
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(aoUsers)}">
+                            <td colspan="8" class="text-center text-muted">No AO users found.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap Modal for Creating AO -->
+    <div class="modal fade" id="aoModal" tabindex="-1" aria-labelledby="aoModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content shadow rounded-3">
+                <div class="modal-body">
+                    <div th:replace="fragments/ao_form_fragment :: aoFormFragment"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

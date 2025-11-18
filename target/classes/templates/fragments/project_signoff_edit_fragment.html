@@ -1,0 +1,88 @@
+<div th:fragment="projectSignoffEditFragment(signoff)">
+    <div class="card shadow-lg mt-4">
+        <div class="card-body">
+            <h2 class="h5 text-primary border-bottom pb-2 mb-3"
+                th:text="${signoff.id != null} ? 'Edit Project Signoff' : 'New Project Signoff'">
+                Project Signoff Form
+            </h2>
+
+            <form th:action="@{/project-signoffs/update/{id}(id=${signoff.id})}" 
+                  th:object="${signoff}" method="post" enctype="multipart/form-data" class="row g-3">
+
+                <!-- Subject -->
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Subject</label>
+                    <input type="text" name="subject" th:value="${signoff.subject}" class="form-control" required/>
+                </div>
+
+                <!-- Letter Date -->
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Letter Date</label>
+                    <input type="date" name="letterDate" th:value="${signoff.letterDate}" class="form-control" required/>
+                </div>
+
+                <!-- Sender Info -->
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Sender Name</label>
+                    <input type="text" name="senderName" th:value="${signoff.senderName}" class="form-control"/>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Sender Designation</label>
+                    <input type="text" name="senderDesignation" th:value="${signoff.senderDesignation}" class="form-control"/>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Sender Email</label>
+                    <input type="email" name="senderEmail" th:value="${signoff.senderEmail}" class="form-control"/>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Phone No</label>
+                    <input type="text" name="phoneNo" th:value="${signoff.phoneNo}" class="form-control"/>
+                </div>
+
+                <div class="col-12">
+                    <label class="form-label fw-semibold">Sender Address</label>
+                    <textarea name="senderAddress" class="form-control" th:text="${signoff.senderAddress}" rows="2"></textarea>
+                </div>
+
+                <!-- Project Name (editable text) -->
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Project Name</label>
+                    <input type="text" name="projectName" th:value="${signoff.project.projectName}" class="form-control" required/>
+                </div>
+
+                <!-- Status -->
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Status</label>
+                    <select name="status" class="form-select" required>
+                        <option value="">-- Select Status --</option>
+                        <option value="Pending" th:selected="${signoff.status == 'Pending'}">Pending</option>
+                        <option value="Approved" th:selected="${signoff.status == 'Approved'}">Approved</option>
+                        <option value="Rejected" th:selected="${signoff.status == 'Rejected'}">Rejected</option>
+                        <option value="Completed" th:selected="${signoff.status == 'Completed'}">Completed</option>
+                    </select>
+                </div>
+
+                <!-- File Upload -->
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Upload File (PDF)</label>
+                    <input type="file" id="file" name="file" class="form-control" accept="application/pdf">
+                    <small th:if="${signoff.filePath}" class="text-muted">
+                        Current file:
+                        <a th:href="@{${signoff.filePath}}" target="_blank">View PDF</a>
+                    </small>
+                </div>
+
+                <!-- Buttons -->
+                <div class="col-12 d-flex justify-content-between mt-3">
+                    <a th:href="@{/project-signoffs}" class="btn btn-secondary">Cancel</a>
+                    <button type="submit" class="btn btn-primary"
+                            th:text="${signoff.id != null} ? 'Update' : 'Create'"></button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>

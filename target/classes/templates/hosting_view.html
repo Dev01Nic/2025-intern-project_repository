@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>View Hosting</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<div class="container mt-5">
+    <div class="card shadow-lg">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Hosting Details</h4>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">ID</dt>
+                <dd class="col-sm-9" th:text="${hosting.hostingId}"></dd>
+
+                <dt class="col-sm-3">Hosting Type</dt>
+                <dd class="col-sm-9" th:text="${hosting.hostingType}"></dd>
+
+                <dt class="col-sm-3">Description</dt>
+                <dd class="col-sm-9" th:text="${hosting.description}"></dd>
+
+                <dt class="col-sm-3">Public IP</dt>
+                <dd class="col-sm-9" th:text="${hosting.publicIp}"></dd>
+
+                <dt class="col-sm-3">Private IP</dt>
+                <dd class="col-sm-9" th:text="${hosting.privateIp}"></dd>
+
+                <dt class="col-sm-3">Domain Name</dt>
+                <dd class="col-sm-9" th:text="${hosting.domainName}"></dd>
+
+                <dt class="col-sm-3">Operating System</dt>
+                <dd class="col-sm-9" th:text="${hosting.operatingSystem}"></dd>
+
+                <dt class="col-sm-3">Server Specs</dt>
+                <dd class="col-sm-9" th:text="${hosting.serverSpecs}"></dd>
+
+                <dt class="col-sm-3">Project</dt>
+                <dd class="col-sm-9" th:text="${hosting.project != null ? hosting.project.projectName : 'N/A'}"></dd>
+
+                <dt class="col-sm-3">Data Center</dt>
+                <dd class="col-sm-9" th:text="${hosting.dataCenter != null ? hosting.dataCenter.name : 'N/A'}"></dd>
+
+                <dt class="col-sm-3">DC Location</dt>
+                <dd class="col-sm-9" th:text="${hosting.dataCenter != null ? hosting.dataCenter.location : 'N/A'}"></dd>
+
+                <dt class="col-sm-3">DC Contact</dt>
+                <dd class="col-sm-9" th:text="${hosting.dataCenter != null ? hosting.dataCenter.contactPerson + ' (' + hosting.dataCenter.contactNo + ')' : 'N/A'}"></dd>
+            </dl>
+
+            <div class="mt-4">
+                <a th:href="@{/hostings}" class="btn btn-secondary">Back</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

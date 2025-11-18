@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${requestLetter.id != null} ? 'Edit Request Letter' : 'New Request Letter'"></title>
+    <link rel="stylesheet" 
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"/>
+</head>
+<body class="bg-light">
+<div class="container mt-4">
+    <div class="card shadow-lg">
+        <div class="card-header bg-primary text-white">
+            <h4 th:text="${requestLetter.id != null} ? 'Edit Request Letter' : 'Create Request Letter'"></h4>
+        </div>
+        <div class="card-body">
+            <form th:action="${requestLetter.id != null} ? @{/request-letters/update/{id}(id=${requestLetter.id})} 
+                                                          : @{/request-letters/create}"
+                  th:object="${requestLetter}"
+                  method="post"
+                  enctype="multipart/form-data">
+
+                <!-- Subject -->
+                <div class="mb-3">
+                    <label class="form-label">Subject</label>
+                    <input type="text" th:field="*{subject}" class="form-control" placeholder="Enter subject" required>
+                </div>
+
+                <!-- Letter Date -->
+                <div class="mb-3">
+                    <label class="form-label">Letter Date</label>
+                    <input type="date" th:field="*{letterDate}" class="form-control">
+                </div>
+
+                <!-- Sender Name -->
+                <div class="mb-3">
+                    <label class="form-label">Sender Name</label>
+                    <input type="text" th:field="*{senderName}" class="form-control" placeholder="Enter sender name">
+                </div>
+
+                <!-- Sender Designation -->
+                <div class="mb-3">
+                    <label class="form-label">Sender Designation</label>
+                    <input type="text" th:field="*{senderDesignation}" class="form-control" placeholder="Enter designation">
+                </div>
+
+                <!-- Sender Email -->
+                <div class="mb-3">
+                    <label class="form-label">Sender Email</label>
+                    <input type="email" th:field="*{senderEmail}" class="form-control" placeholder="Enter email">
+                </div>
+
+                <!-- Phone Number -->
+                <div class="mb-3">
+                    <label class="form-label">Phone Number</label>
+                    <input type="text" th:field="*{phoneNo}" class="form-control" placeholder="Enter phone number">
+                </div>
+
+                <!-- Sender Address -->
+                <div class="mb-3">
+                    <label class="form-label">Sender Address</label>
+                    <textarea th:field="*{senderAddress}" class="form-control" rows="3"
+                              placeholder="Enter address"></textarea>
+                </div>
+
+                <!-- File Upload -->
+                <div class="mb-3">
+                    <label class="form-label">Attach File</label>
+                    <input type="file" name="file" class="form-control">
+                    <div class="form-text" th:if="${requestLetter.filePath != null}">
+                        Current file: <a th:href="@{/uploads/{file}(file=${requestLetter.filePath})}"
+                                         th:text="${requestLetter.filePath}"></a>
+                    </div>
+                </div>
+
+                <!-- Status -->
+                <div class="mb-3">
+                    <label class="form-label">Status</label>
+                    <select th:field="*{status}" class="form-select" required>
+                        <option value="">-- Select Status --</option>
+                        <option value="Pending">Pending</option>
+                        <option value="Approved">Approved</option>
+                        <option value="Rejected">Rejected</option>
+                    </select>
+                </div>
+
+                <!-- Project -->
+               <div class="mb-3">
+    <label class="form-label">Project</label>
+    <input type="text" class="form-control" th:value="${requestLetter.project.projectName}">
+</div>
+
+
+                <!-- Buttons -->
+                <div class="d-flex justify-content-between">
+                    <a th:href="@{/request-letters}" class="btn btn-secondary">Cancel</a>
+                    <button type="submit" class="btn btn-primary"
+                            th:text="${requestLetter.id != null} ? 'Update' : 'Create'"></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

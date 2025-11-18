@@ -1,0 +1,90 @@
+<div th:fragment="projectManualEditFragment(manual)">
+    <div class="card shadow-lg mt-4">
+        <div class="card-body">
+            <h2 class="h5 text-primary border-bottom pb-2 mb-3"
+                th:text="${manual.id != null} ? 'Edit Project Manual' : 'New Project Manual'">
+                Project Manual Form
+            </h2>
+
+            <form th:action="@{/project-manuals/update/{id}(id=${manual.id})}" 
+                  th:object="${manual}" method="post" enctype="multipart/form-data" class="row g-3">
+
+                <!-- Version -->
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Version</label>
+                    <input type="text" name="version" th:value="${manual.version}" class="form-control" required/>
+                </div>
+
+                <!-- Title -->
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Title</label>
+                    <input type="text" name="title" th:value="${manual.title}" class="form-control" required/>
+                </div>
+
+                <!-- Description -->
+                <div class="col-12">
+                    <label class="form-label fw-semibold">Description</label>
+                    <textarea name="description" class="form-control" th:text="${manual.description}" rows="3"></textarea>
+                </div>
+
+                <!-- Dates -->
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Submitted Date</label>
+                    <input type="date" name="submittedDate" th:value="${manual.submittedDate}" class="form-control"/>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Approved Date</label>
+                    <input type="date" name="approvedDate" th:value="${manual.approvedDate}" class="form-control"/>
+                </div>
+
+                <!-- Project Name (editable text) -->
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Project Name</label>
+                    <input type="text" name="projectName" th:value="${manual.project.projectName}" class="form-control" required/>
+                </div>
+
+                <!-- Submitted By (editable text) -->
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Submitted By</label>
+                    <input type="text" name="submittedBy" th:value="${manual.submittedBy.username}" class="form-control"/>
+                </div>
+
+                <!-- Approved By (editable text) -->
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Approved By</label>
+                    <input type="text" name="approvedBy" th:value="${manual.approvedBy.username}" class="form-control"/>
+                </div>
+
+                <!-- Status -->
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Status</label>
+                    <select name="status" class="form-select" required>
+                        <option value="">-- Select Status --</option>
+                        <option value="Draft" th:selected="${manual.status == 'Draft'}">Draft</option>
+                        <option value="Submitted" th:selected="${manual.status == 'Submitted'}">Submitted</option>
+                        <option value="Approved" th:selected="${manual.status == 'Approved'}">Approved</option>
+                        <option value="Rejected" th:selected="${manual.status == 'Rejected'}">Rejected</option>
+                    </select>
+                </div>
+
+                <!-- File Upload -->
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Upload Manual (PDF)</label>
+                    <input type="file" id="file" name="file" class="form-control" accept="application/pdf">
+                    <small th:if="${manual.filePath}" class="text-muted">
+                        Current file:
+                        <a th:href="@{${manual.filePath}}" target="_blank">View PDF</a>
+                    </small>
+                </div>
+
+                <!-- Buttons -->
+                <div class="col-12 d-flex justify-content-between mt-3">
+                    <a th:href="@{/project-manuals}" class="btn btn-secondary">Cancel</a>
+                    <button type="submit" class="btn btn-primary"
+                            th:text="${manual.id != null} ? 'Update' : 'Create'"></button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>

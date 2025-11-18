@@ -1,0 +1,86 @@
+<div th:fragment="datacenterEditFragment(datacenter)">
+    <div class="card shadow-lg mt-4">
+        <div class="card-body">
+            <h2 class="h5 text-primary border-bottom pb-2 mb-3"
+                th:text="${datacenter.datacenterId != null} ? 'Edit Data Center' : 'New Data Center'">
+                Data Center Form
+            </h2>
+
+            <form th:action="@{/datacenters/update/{id}(id=${datacenter.datacenterId})}" 
+                  th:object="${datacenter}" method="post" class="row g-3">
+
+                <!-- Name -->
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Name</label>
+                    <input type="text" name="name" th:value="${datacenter.name}" class="form-control" required/>
+                </div>
+
+                <!-- Location -->
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Location</label>
+                    <input type="text" name="location" th:value="${datacenter.location}" class="form-control"/>
+                </div>
+
+                <!-- Type -->
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Type</label>
+                    <input type="text" name="type" th:value="${datacenter.type}" class="form-control"/>
+                </div>
+
+                <!-- Capacity -->
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Capacity</label>
+                    <input type="text" name="capacity" th:value="${datacenter.capacity}" class="form-control"/>
+                </div>
+
+                <!-- Contact Person -->
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Contact Person</label>
+                    <input type="text" name="contactPerson" th:value="${datacenter.contactPerson}" class="form-control"/>
+                </div>
+
+                <!-- Contact No -->
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Contact No</label>
+                    <input type="text" name="contactNo" th:value="${datacenter.contactNo}" class="form-control"/>
+                </div>
+
+                <!-- Email -->
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Email</label>
+                    <input type="email" name="email" th:value="${datacenter.email}" class="form-control"/>
+                </div>
+
+                <!-- Status -->
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Status</label>
+                    <select name="status" class="form-select" required>
+                        <option value="">-- Select Status --</option>
+                        <option value="Active" th:selected="${datacenter.status == 'Active'}">Active</option>
+                        <option value="Inactive" th:selected="${datacenter.status == 'Inactive'}">Inactive</option>
+                    </select>
+                </div>
+
+                <!-- Established Date -->
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Established Date</label>
+                    <input type="date" name="establishedDate" th:value="${datacenter.establishedDate}" class="form-control"/>
+                </div>
+
+                <!-- Description -->
+                <div class="col-12">
+                    <label class="form-label fw-semibold">Description</label>
+                    <textarea name="description" class="form-control" th:text="${datacenter.description}" rows="3"></textarea>
+                </div>
+
+                <!-- Buttons -->
+                <div class="col-12 d-flex justify-content-between mt-3">
+                    <a th:href="@{/datacenters}" class="btn btn-secondary">Cancel</a>
+                    <button type="submit" class="btn btn-success"
+                            th:text="${datacenter.datacenterId != null} ? 'Update' : 'Create'"></button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Project Proposals List</title>
+    <style>
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+        th { background: #00416A; color: white; }
+        tr:nth-child(even) { background: #f2f2f2; }
+        a.button { padding: 5px 10px; background: #00416A; color: white; text-decoration: none; border-radius: 3px; }
+        a.button:hover { background: #0066AA; }
+    </style>
+</head>
+<body>
+    <h1>All Project Proposals</h1>
+    <a href="/proposals/new" class="button">New Proposal</a>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Date</th>
+                <th>File</th>
+                <th>Project</th>
+                <th>Submitted By</th>
+                <th>Acceptance Letter</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="proposal : ${proposals}">
+                <td th:text="${proposal.id}"></td>
+                <td th:text="${proposal.proposalTitle}"></td>
+                <td th:text="${proposal.proposalDate}"></td>
+                <td>
+                    <a th:href="@{${proposal.filePath}}" target="_blank">View File</a>
+                </td>
+                <td th:text="${proposal.project.projectName}"></td>
+                <td th:text="${proposal.submittedBy.name}"></td>
+                <td th:text="${proposal.acceptanceLetter != null ? 'Issued' : 'Pending'}"></td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>UAT Letters List</title>
+    <style>
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+        th { background: #00416A; color: white; }
+        tr:nth-child(even) { background: #f2f2f2; }
+        a.button { padding: 5px 10px; background: #00416A; color: white; text-decoration: none; border-radius: 3px; }
+        a.button:hover { background: #0066AA; }
+    </style>
+</head>
+<body>
+    <h1>All UAT Letters</h1>
+    <a href="/uat-letters/new" class="button">New UAT Letter</a>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Subject</th>
+                <th>Letter Date</th>
+                <th>Sender</th>
+                <th>Designation</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Address</th>
+                <th>File</th>
+                <th>Status</th>
+                <th>Project</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="letter : ${letters}">
+                <td th:text="${letter.id}"></td>
+                <td th:text="${letter.subject}"></td>
+                <td th:text="${letter.letterDate}"></td>
+                <td th:text="${letter.senderName}"></td>
+                <td th:text="${letter.senderDesignation}"></td>
+                <td th:text="${letter.senderEmail}"></td>
+                <td th:text="${letter.phoneNo}"></td>
+                <td th:text="${letter.senderAddress}"></td>
+                <td><a th:href="@{${letter.filePath}}" target="_blank">View</a></td>
+                <td th:text="${letter.status}"></td>
+                <td th:text="${letter.project.projectName}"></td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

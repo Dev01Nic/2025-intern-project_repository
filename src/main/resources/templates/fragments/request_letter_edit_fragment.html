@@ -1,0 +1,81 @@
+<div th:fragment="requestLetterEditFragment(requestLetter)">
+    <div class="card shadow-lg mt-4">
+        <div class="card-body">
+            <h2 class="h5 text-primary border-bottom pb-2 mb-3"
+                th:text="${requestLetter.id != null} ? 'Edit Request Letter' : 'New Request Letter'">
+                Request Letter Form
+            </h2>
+
+            <form th:action="@{/request-letters/update/{id}(id=${requestLetter.id})}" 
+                  th:object="${requestLetter}" 
+                  method="post" class="row g-3">
+
+                <!-- Subject -->
+                  <div class="col-md-6">
+                    <label class="form-label fw-semibold">Subject</label>
+                    <input type="text" name="subject" th:value="${requestLetter.subject}" class="form-control" required/>
+                </div>
+
+                <!-- Letter Date -->
+                 <div class="col-md-6">
+                    <label class="form-label fw-semibold">Letter Date</label>
+                    <input type="date" name="letterDate" th:value="${requestLetter.letterDate}" class="form-control"/>
+                </div>
+
+                <!-- Sender Name -->
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Sender Name</label>
+                    <input type="text" name="senderName" th:value="${requestLetter.senderName}" class="form-control" required/>
+                </div>
+
+                <!-- Sender Designation -->
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Sender Designation</label>
+                    <input type="text" name="senderDesignation" th:value="${requestLetter.senderDesignation}" class="form-control"/>
+                </div>
+
+                <!-- Sender Email -->
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Sender Email</label>
+                    <input type="email" name="senderEmail" th:value="${requestLetter.senderEmail}" class="form-control"/>
+                </div>
+
+                <!-- Phone Number -->
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Phone No</label>
+                    <input type="text" name="phoneNo" th:value="${requestLetter.phoneNo}" class="form-control"/>
+                </div>
+
+                <!-- Sender Address -->
+                <div class="col-12">
+                    <label class="form-label fw-semibold">Sender Address</label>
+                    <textarea name="senderAddress" class="form-control" th:text="${requestLetter.senderAddress}"></textarea>
+                </div>
+
+                <!-- Status -->
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Status</label>
+                    <select th:field="*{status}" class="form-select" required>
+                        <option value="">-- Select Status --</option>
+                        <option value="Pending">Pending</option>
+                        <option value="Approved">Approved</option>
+                        <option value="Rejected">Rejected</option>
+                    </select>
+                </div>
+
+                <!-- Project Name (editable text) -->
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Project Name</label>
+                    <input type="text" th:value="*{project.projectName}" class="form-control" required>
+                </div>
+
+                <!-- Buttons -->
+                <div class="col-12 d-flex justify-content-between mt-3">
+                    <a th:href="@{/request-letters/list}" class="btn btn-secondary">Cancel</a>
+                    <button type="submit" class="btn btn-primary"
+                            th:text="${requestLetter.id != null} ? 'Update' : 'Create'"></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

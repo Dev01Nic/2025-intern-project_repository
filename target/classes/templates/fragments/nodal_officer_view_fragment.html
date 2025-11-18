@@ -1,0 +1,39 @@
+<!-- File: fragments/nodal_officer_view_fragment.html -->
+<div th:fragment="nodal_officer_view_fragment">
+    <div class="card shadow-lg">
+        <div class="card-header bg-primary text-white">
+            <h4>Nodal Officer Details</h4>
+        </div>
+        <div class="card-body">
+
+            <dl class="row">
+                <dt class="col-sm-3">ID</dt>
+                <dd class="col-sm-9" th:text="${user.id}"></dd>
+
+                <dt class="col-sm-3">Name</dt>
+                <dd class="col-sm-9" th:text="${user.name}"></dd>
+
+                <dt class="col-sm-3">Username</dt>
+                <dd class="col-sm-9" th:text="${user.username}"></dd>
+
+                <dt class="col-sm-3">Email</dt>
+                <dd class="col-sm-9" th:text="${user.email}"></dd>
+
+                <dt class="col-sm-3">Phone</dt>
+                <dd class="col-sm-9" th:text="${user.phoneNo != null ? user.phoneNo : 'N/A'}"></dd>
+
+                <dt class="col-sm-3">Designation</dt>
+                <dd class="col-sm-9" th:text="${user.designation != null ? user.designation : 'N/A'}"></dd>
+
+                <dt class="col-sm-3">Department</dt>
+                <dd class="col-sm-9" th:text="${user.department != null ? user.department.deptName : 'N/A'}"></dd>
+
+                <dt class="col-sm-3">Role</dt>
+                <dd class="col-sm-9" th:text="${user.role != null ? user.role.roleName : 'N/A'}"></dd>
+            </dl>
+
+            <a th:href="@{/nodal}" class="btn btn-secondary mt-3">Back</a>
+
+        </div>
+    </div>
+</div>

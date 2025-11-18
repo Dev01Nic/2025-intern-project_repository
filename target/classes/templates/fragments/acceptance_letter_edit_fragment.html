@@ -1,0 +1,97 @@
+<div th:fragment="acceptanceLetterEditFragment(acceptanceLetter)">
+    <div class="card shadow-lg mt-4">
+        <div class="card-body">
+            <h2 class="h5 text-primary border-bottom pb-2 mb-3"
+                th:text="${acceptanceLetter.id != null} ? 'Edit Acceptance Letter' : 'New Acceptance Letter'">
+                Acceptance Letter Form
+            </h2>
+
+            <form th:action="@{/acceptance-letters/update/{id}(id=${acceptanceLetter.id})}" 
+                  th:object="${acceptanceLetter}" 
+                  method="post" enctype="multipart/form-data" class="row g-3">
+
+                <!-- Subject -->
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Subject</label>
+                    <input type="text" name="subject" th:value="${acceptanceLetter.subject}" class="form-control" required/>
+                </div>
+
+                <!-- Letter Date -->
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Letter Date</label>
+                    <input type="date" name="letterDate" th:value="${acceptanceLetter.letterDate}" class="form-control" required/>
+                </div>
+
+                <!-- Sender Name -->
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Sender Name</label>
+                    <input type="text" name="senderName" th:value="${acceptanceLetter.senderName}" class="form-control" required/>
+                </div>
+
+                <!-- Sender Designation -->
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Sender Designation</label>
+                    <input type="text" name="senderDesignation" th:value="${acceptanceLetter.senderDesignation}" class="form-control"/>
+                </div>
+
+                <!-- Sender Email -->
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Sender Email</label>
+                    <input type="email" name="senderEmail" th:value="${acceptanceLetter.senderEmail}" class="form-control"/>
+                </div>
+
+                <!-- Phone Number -->
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Phone No</label>
+                    <input type="text" name="phoneNo" th:value="${acceptanceLetter.phoneNo}" class="form-control"/>
+                </div>
+
+                <!-- Sender Address -->
+                <div class="col-12">
+                    <label class="form-label fw-semibold">Sender Address</label>
+                    <textarea name="senderAddress" class="form-control" th:text="${acceptanceLetter.senderAddress}"></textarea>
+                </div>
+
+                <!-- Status -->
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Status</label>
+                    <select name="status" class="form-select" required>
+                        <option value="">-- Select Status --</option>
+                        <option value="Pending" th:selected="${acceptanceLetter.status == 'Pending'}">Pending</option>
+                        <option value="Approved" th:selected="${acceptanceLetter.status == 'Approved'}">Approved</option>
+                        <option value="Rejected" th:selected="${acceptanceLetter.status == 'Rejected'}">Rejected</option>
+                    </select>
+                </div>
+
+                <!-- Project Name (editable text) -->
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Project Name</label>
+                    <input type="text" name="projectName" th:value="${acceptanceLetter.project.projectName}" class="form-control" required/>
+                </div>
+
+                <!-- Proposal Title (editable text) -->
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Proposal Title</label>
+                    <input type="text" name="proposalTitle" th:value="${acceptanceLetter.proposal.proposalTitle}" class="form-control"/>
+                </div>
+
+                <!-- File Upload -->
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Upload PDF</label>
+                    <input type="file" id="file" name="file" class="form-control" accept="application/pdf">
+                    <small th:if="${acceptanceLetter.filePath}" class="text-muted">
+                        Current file:
+                        <a th:href="@{${acceptanceLetter.filePath}}" target="_blank">View PDF</a>
+                    </small>
+                </div>
+
+                <!-- Buttons -->
+                <div class="col-12 d-flex justify-content-between mt-3">
+                    <a th:href="@{/acceptance-letters}" class="btn btn-secondary">Cancel</a>
+                    <button type="submit" class="btn btn-primary"
+                            th:text="${acceptanceLetter.id != null} ? 'Update' : 'Create'"></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

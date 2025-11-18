@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Project Management Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+
+  <style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        background: #f4f6f9;
+    }
+
+    /* Navbar */
+    .topbar {
+        background: #fff;
+        padding: 0.8rem 1.5rem;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: sticky;
+        top: 0;
+        z-index: 1030;
+    }
+    .topbar h1 {
+        font-size: 1.4rem;
+        color: #343a40;
+        margin: 0;
+    }
+    .topbar .profile {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+    .topbar .profile i {
+        font-size: 1.2rem;
+        color: #6610f2;
+    }
+
+    /* Sidebar */
+    .sidebar {
+        width: 260px;
+        min-height: 100vh;
+        background: #fff;
+        box-shadow: 2px 0 12px rgba(0,0,0,0.05);
+        padding: 1.5rem 1rem;
+        position: sticky;
+        top: 60px;
+    }
+    .sidebar h2 {
+        font-size: 1.25rem;
+        margin-bottom: 2rem;
+        font-weight: 600;
+        color: #6610f2;
+    }
+    .sidebar a {
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        font-weight: 500;
+        padding: 0.7rem 1rem;
+        border-radius: 0.5rem;
+        color: #495057;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+    .sidebar a:hover,
+    .sidebar a.active {
+        background: #e7f1ff;
+        color: #6610f2;
+    }
+
+    /* Content */
+    .content {
+        flex-grow: 1;
+        padding: 2rem;
+    }
+
+    /* Cards */
+    .card {
+        border-radius: 1rem;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        border: none;
+    }
+
+    /* Tabs */
+    .nav-tabs {
+        border-bottom: none;
+    }
+    .nav-tabs .nav-link {
+        border: none;
+        border-radius: 0.75rem 0.75rem 0 0;
+        background: #f8f9fa;
+        color: #495057;
+        font-weight: 500;
+        margin-right: 0.25rem;
+        transition: all 0.3s;
+    }
+    .nav-tabs .nav-link:hover {
+        background: #e2e6ea;
+        color: #343a40;
+    }
+    .nav-tabs .nav-link.active {
+        background: linear-gradient(135deg, #6610f2, #0d6efd);
+        color: #fff;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    /* Accordion */
+    .accordion-button {
+        border-radius: 0.75rem;
+        margin-bottom: 0.5rem;
+        background: #f8f9fa;
+        font-weight: 500;
+        transition: all 0.3s;
+        color: #343a40;
+    }
+    .accordion-button:not(.collapsed) {
+        background: #fff;
+        color: #6610f2;
+        font-weight: 600;
+        box-shadow: inset 0 -1px 0 rgba(0,0,0,0.05);
+    }
+    .accordion-body {
+        background: #fff;
+        border-radius: 0 0 0.75rem 0.75rem;
+        padding: 1rem;
+    }
+
+    /* Buttons */
+    .btn-primary {
+        border-radius: 0.75rem;
+        padding: 0.6rem 1.5rem;
+        font-weight: 500;
+        background: linear-gradient(135deg,#6610f2,#0d6efd);
+        border: none;
+        transition: all 0.3s;
+    }
+    .btn-primary:hover {
+        background: linear-gradient(135deg,#0d6efd,#6610f2);
+    }
+
+    /* Inputs */
+    input, select, textarea {
+        border-radius: 0.5rem !important;
+    }
+
+    /* Tabs content animation */
+    .tab-content {
+        min-height: 400px;
+        transition: all 0.3s ease;
+    }
+    .tab-pane {
+        transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    .tab-pane.fade {
+        opacity: 0;
+        display: block !important;
+        height: 0;
+        overflow: hidden;
+    }
+    .tab-pane.show {
+        opacity: 1;
+        height: auto;
+    }
+  </style>
+</head>
+<body class="d-flex flex-column">
+
+  <div class="d-flex">
+    <!-- Sidebar -->
+    <div class="sidebar d-none d-md-block">
+        <h2>Navigation</h2>
+        <a th:href="@{/hod}" class="active"><i class="bi bi-bar-chart-line"></i> Dashboard</a>
+        <a th:href="@{/hod/projects/list}"><i class="bi bi-folder2-open"></i> Projects</a>
+    </div>
+
+    <!-- Mobile Sidebar Trigger -->
+    <div class="d-md-none bg-white p-2 shadow-sm w-100">
+        <button class="btn btn-outline-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileSidebar">
+            ☰ Menu
+        </button>
+    </div>
+
+    <!-- Mobile Offcanvas Sidebar -->
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="mobileSidebar">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title">Projects</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+        </div>
+        <div class="offcanvas-body sidebar p-0">
+            <a th:href="@{/hod}"><i class="bi bi-bar-chart-line"></i> Dashboard</a>
+            <a th:href="@{/hod/projects/list}"><i class="bi bi-folder2-open"></i> Projects</a>
+        </div>
+    </div>
+    <!-- Content -->
+    <div class="content">
+     <h1 class="mb-4">
+        Project Management - 
+        <span th:text="${project.projectName}">Sample Project</span>
+    </h1>
+        <div class="card p-3 shadow-sm mb-4">
+            <!-- Tabs -->
+            <ul class="nav nav-tabs" id="projectTabs" role="tablist">
+                <li class="nav-item"><button class="nav-link active" id="projects-tab" data-bs-toggle="tab" data-bs-target="#projects">Project Details</button></li>
+                <li class="nav-item"><button class="nav-link" id="department-tab" data-bs-toggle="tab" data-bs-target="#department">Department</button></li>
+                <li class="nav-item"><button class="nav-link" id="documentation-tab" data-bs-toggle="tab" data-bs-target="#documentation">Documentation</button></li>
+                <li class="nav-item"><button class="nav-link" id="users-tab" data-bs-toggle="tab" data-bs-target="#users">Users</button></li>
+                <li class="nav-item"><button class="nav-link" id="resources-tab" data-bs-toggle="tab" data-bs-target="#resources">Resources</button></li>
+                <li class="nav-item"><button class="nav-link" id="hosting-tab" data-bs-toggle="tab" data-bs-target="#hosting">Hosting</button></li>
+            </ul>
+        </div>
+
+      <div class="tab-content mt-3">
+          <!-- Project Details Example -->
+          <div id="projects" class="tab-pane fade show active">
+              <div class="card p-4 mb-3">
+                  <h2 class="h5 mb-3" style="color:#6610f2;">Edit Project</h2>
+                  <form th:action="@{/hod/projects/update/{id}(id=${project.projectId})}" method="post">
+                      <div class="row g-3">
+                          <div class="col-md-6">
+                              <label class="form-label">Project Name</label>
+                              <input type="text" name="projectName" class="form-control" th:value="${project.projectName}" required>
+                          </div>
+                          <div class="col-md-6">
+                              <label class="form-label">Department</label>
+                              <select class="form-select" name="departmentId">
+                                  <option th:each="dept : ${departments}" th:value="${dept.deptId}" th:selected="${dept.deptId == project.department?.deptId}" th:text="${dept.deptName}"></option>
+                              </select>
+                          </div>
+                          <div class="col-md-6">
+                              <label class="form-label">Project Manager</label>
+                              <select class="form-select" name="projectManagerId">
+                                  <option th:each="user : ${users}" th:value="${user.id}" th:selected="${project.projectManager != null and user.id == project.projectManager.id}" th:text="${user.username}"></option>
+                              </select>
+                          </div>
+                          <div class="col-md-6">
+                              <label class="form-label">Created By</label>
+                              <select class="form-select" name="createdById">
+                                  <option th:each="user : ${users}" th:value="${user.id}" th:selected="${project.createdBy != null and user.id == project.createdBy.id}" th:text="${user.username}"></option>
+                              </select>
+                          </div>
+                          <div class="col-md-6">
+                              <label class="form-label">Start Date</label>
+                              <input type="date" name="startDate" class="form-control" th:value="${project.startDate}">
+                          </div>
+                          <div class="col-md-6">
+                              <label class="form-label">Status</label>
+                              <select class="form-select" name="status.name" required>
+                                  <option th:value="New" th:selected="${project.status.name == 'New'}">New</option>
+                                  <option th:value="Ongoing" th:selected="${project.status.name == 'Ongoing'}">Ongoing</option>
+                                  <option th:value="Completed" th:selected="${project.status.name == 'Completed'}">Completed</option>
+                              </select>
+                          </div>
+                          <div class="col-md-6">
+                              <label class="form-label">Category</label>
+                              <select class="form-select" name="categoryId" required>
+                                  <option value="" disabled>Select Category</option>
+                                  <option th:each="cat : ${categories}" th:value="${cat.categoryId}" th:text="${cat.categoryName}" th:selected="${project.category != null and cat.categoryId == project.category.categoryId}"></option>
+                              </select>
+                          </div>
+                          <div class="col-md-6">
+                              <label class="form-label">Priority</label>
+                              <select class="form-select" name="priority" required>
+                                  <option th:value="Low" th:selected="${project.priority == 'Low'}">Low</option>
+                                  <option th:value="Medium" th:selected="${project.priority == 'Medium'}">Medium</option>
+                                  <option th:value="High" th:selected="${project.priority == 'High'}">High</option>
+                              </select>
+                          </div>
+                          <div class="col-12">
+                              <label class="form-label">Technologies Used</label>
+                              <textarea class="form-control" name="technologiesUsed" rows="2" th:text="${project.technologiesUsed}"></textarea>
+                          </div>
+                          <div class="col-12">
+                              <label class="form-label">Description</label>
+                              <textarea class="form-control" name="description" rows="3" th:text="${project.description}"></textarea>
+                          </div>
+                      </div>
+                      <button type="submit" class="btn btn-primary mt-3">Update Project</button>
+                  </form>
+              </div>
+          </div>
+
+          <!-- Department -->
+          <div id="department" class="tab-pane fade">
+              <h2 class="h5">Department</h2>
+              <div class="accordion" id="departmentAccordion">
+                  <div class="accordion-item">
+                      <h2 class="accordion-header">
+                          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#hooTab">HO</button>
+                      </h2>
+                        <div id="hooTab" class="accordion-collapse collapse" data-bs-parent="#departmentAccordion">
+                          <div class="accordion-body" th:replace="fragments/hoo_department_fragment :: hooDepartmentListFragment"></div>
+                      </div>
+                  </div>
+                  <div class="accordion-item">
+                      <h2 class="accordion-header">
+                          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#nodalTab">Nodal Officer</button>
+                      </h2>
+                      <div id="nodalTab" class="accordion-collapse collapse" data-bs-parent="#departmentAccordion">
+                          <div class="accordion-body" th:replace="fragments/nodal_officer_fragment :: nodalOfficerListFragment"></div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+          <!-- Documentation -->
+          <div id="documentation" class="tab-pane fade">
+              <h2 class="h5">Documentation</h2>
+              <div class="accordion" id="documentationAccordion">
+                  <div class="accordion-item">
+                      <h2 class="accordion-header">
+                          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#reqLetterListTab">Request Letters</button>
+                      </h2>
+                      <div id="reqLetterListTab" class="accordion-collapse collapse" data-bs-parent="#documentationAccordion">
+                          <div class="accordion-body" th:replace="fragments/request_letter_list_fragment :: requestLetterListFragment"></div>
+                      </div>
+                  </div>
+                  <div class="accordion-item">
+                      <h2 class="accordion-header">
+                          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#proposalListTab">Project Proposals</button>
+                      </h2>
+                      <div id="proposalListTab" class="accordion-collapse collapse" data-bs-parent="#documentationAccordion">
+                          <div class="accordion-body" th:replace="fragments/project_proposal_list_fragment :: projectProposalListFragment"></div>
+                      </div>
+                  </div>
+                  <div class="accordion-item">
+                      <h2 class="accordion-header">
+                          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#acceptanceListTab">Acceptance Letters</button>
+                      </h2>
+                      <div id="acceptanceListTab" class="accordion-collapse collapse" data-bs-parent="#documentationAccordion">
+                          <div class="accordion-body" th:replace="fragments/acceptance_letter_list_fragment :: acceptanceLetterListFragment"></div>
+                      </div>
+                  </div>
+                  <div class="accordion-item">
+                      <h2 class="accordion-header">
+                          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#uatListTab">User Acceptance</button>
+                      </h2>
+                      <div id="uatListTab" class="accordion-collapse collapse" data-bs-parent="#documentationAccordion">
+                          <div class="accordion-body" th:replace="fragments/uat_letter_list_fragment :: uatLetterListFragment"></div>
+                      </div>
+                  </div>
+                  <div class="accordion-item">
+                      <h2 class="accordion-header">
+                          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#signoffListTab">Project Signoff</button>
+                      </h2>
+                      <div id="signoffListTab" class="accordion-collapse collapse" data-bs-parent="#documentationAccordion">
+                          <div class="accordion-body" th:replace="fragments/project_signoff_list_fragment :: projectSignoffListFragment"></div>
+                      </div>
+                  </div>
+                  <div class="accordion-item">
+                      <h2 class="accordion-header">
+                          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#projectManualListTab">Project Manual</button>
+                      </h2>
+                      <div id="projectManualListTab" class="accordion-collapse collapse" data-bs-parent="#documentationAccordion">
+                          <div class="accordion-body" th:replace="fragments/project_manual_list_fragment :: projectManualListFragment"></div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+          <!-- Users -->
+          <div id="users" class="tab-pane fade">
+              <h2 class="h5">Users</h2>
+              <div class="accordion" id="usersAccordion">
+                <div class="accordion-item">
+                      <h2 class="accordion-header">
+                          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#hodListTab">NIC HOD</button>
+                      </h2>
+                      <div id="hodListTab" class="accordion-collapse collapse" data-bs-parent="#usersAccordion">
+                          <div class="accordion-body" th:replace="fragments/hod_users_fragment :: hodUsersListFragment"></div>
+                      </div>
+                  </div>
+                  <div class="accordion-item">
+                      <h2 class="accordion-header">
+                          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#aoListTab">NIC AO</button>
+                      </h2>
+                      <div id="aoListTab" class="accordion-collapse collapse" data-bs-parent="#usersAccordion">
+                          <div class="accordion-body" th:replace="fragments/ao_users_fragment :: aoUsersFragment"></div>
+                      </div>
+                  </div>
+                  <div class="accordion-item">
+                      <h2 class="accordion-header">
+                          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#developersListTab">Developers</button>
+                      </h2>
+                      <div id="developersListTab" class="accordion-collapse collapse" data-bs-parent="#usersAccordion">
+                          <div class="accordion-body" th:replace="fragments/developer_users_fragment :: developerUsersFragment"></div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+          <!-- Resources -->
+          <div id="resources" class="tab-pane fade">
+              <h2 class="h5">Resources</h2>
+              <div class="accordion" id="resourcesAccordion">
+                  <div class="accordion-item">
+                      <h2 class="accordion-header">
+                          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#devicesListTab">Devices</button>
+                      </h2>
+                      <div id="devicesListTab" class="accordion-collapse collapse" data-bs-parent="#resourcesAccordion">
+                          <div class="accordion-body" th:replace="fragments/devices_fragment :: devicesListFragment"></div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+          <!-- Hosting -->
+          <div id="hosting" class="tab-pane fade">
+              <h2 class="h5">Hosting</h2>
+              <div class="accordion" id="hostingAccordion">
+                  <div class="accordion-item">
+                      <h2 class="accordion-header">
+                          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#datacenterListTab">Data Centers</button>
+                      </h2>
+                      <div id="datacenterListTab" class="accordion-collapse collapse" data-bs-parent="#hostingAccordion">
+                          <div class="accordion-body" th:replace="fragments/datacenter_fragment :: datacenterListFragment"></div>
+                      </div>
+                  </div>
+                  <div class="accordion-item">
+                      <h2 class="accordion-header">
+                          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#hostingListTab">Hosting</button>
+                      </h2>
+                      <div id="hostingListTab" class="accordion-collapse collapse" data-bs-parent="#hostingAccordion">
+                          <div class="accordion-body" th:replace="fragments/hosting_fragment :: hostingListFragment"></div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+</div>
+      </div>
+  </div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

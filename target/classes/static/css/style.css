@@ -1,0 +1,76 @@
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(to right, #e3f2fd, #e8f5e9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.container {
+  background: white;
+  width: 450px;
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0px 8px 25px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  animation: fadeIn 0.8s ease-in-out;
+}
+
+h1 {
+  font-size: 26px;
+  margin-bottom: 20px;
+  color: #2c3e50;
+}
+
+p {
+  margin-top: 15px;
+  font-size: 15px;
+  color: #555;
+}
+
+nav {
+  display: flex;
+  flex-direction: column;
+  margin: 20px 0;
+}
+
+nav a {
+  display: block;
+  margin: 10px 0;
+  padding: 12px;
+  border-radius: 12px;
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 500;
+  color: white;
+  background: linear-gradient(to right, #42a5f5, #1e88e5);
+  transition: all 0.3s ease;
+}
+
+nav a:hover {
+  transform: translateY(-3px);
+  background: linear-gradient(to right, #1e88e5, #1565c0);
+}
+
+/* Special logout button */
+nav a:last-child {
+  background: linear-gradient(to right, #ef5350, #e53935);
+}
+
+nav a:last-child:hover {
+  background: linear-gradient(to right, #e53935, #c62828);
+}
+
+/* Animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}

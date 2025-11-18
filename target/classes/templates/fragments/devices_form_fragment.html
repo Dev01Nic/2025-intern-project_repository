@@ -1,0 +1,54 @@
+<div th:fragment="devicesFormFragment">
+    <div class="card shadow-lg mt-4">
+        <div class="card-body">
+            <h2 class="h5 text-primary border-bottom pb-2 mb-3">Device Assignment Form</h2>
+
+            <form th:action="@{/resources/save}" th:object="${resourceAssignment}" 
+                  method="post" enctype="multipart/form-data" class="row g-3">
+
+                <input type="hidden" th:field="*{id}"/>
+
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Issued Date</label>
+                    <input type="date" th:field="*{issuedDate}" class="form-control" required/>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Make</label>
+                    <input type="text" th:field="*{make}" class="form-control" placeholder="Enter make" required/>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Model</label>
+                    <input type="text" th:field="*{model}" class="form-control" placeholder="Enter model"/>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Serial Number</label>
+                    <input type="text" th:field="*{serialNo}" class="form-control" placeholder="Enter serial number"/>
+                </div>
+
+                <div class="col-md-12">
+                    <label class="form-label fw-semibold">Description</label>
+                    <textarea th:field="*{description}" class="form-control" placeholder="Enter description"></textarea>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Attachment</label>
+                    <input type="file" th:field="*{attachmentPath}" class="form-control"/>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Assigned To</label>
+                    <select th:field="*{assignedTo}" class="form-select" required>
+                        <option th:each="user : ${users}" th:value="${user.id}" th:text="${user.name}"></option>
+                    </select>
+                </div>
+
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary px-4">Save Device</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,74 @@
+<div th:fragment="devicesEditFragment(assignment)">
+    <div class="card shadow-lg mt-4">
+        <div class="card-body">
+            <h2 class="h5 text-primary border-bottom pb-2 mb-3"
+                th:text="${assignment.id != null} ? 'Edit Resource Assignment' : 'New Resource Assignment'">
+                Resource Assignment Form
+            </h2>
+
+            <form th:action="@{/resource-assignments/update/{id}(id=${assignment.id})}" 
+                  th:object="${assignment}" method="post" enctype="multipart/form-data" class="row g-3">
+
+                <!-- Issued Date -->
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Issued Date</label>
+                    <input type="date" name="issuedDate" th:value="${assignment.issuedDate}" class="form-control"/>
+                </div>
+
+                <!-- Make -->
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Make</label>
+                    <input type="text" name="make" th:value="${assignment.make}" class="form-control"/>
+                </div>
+
+                <!-- Model -->
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Model</label>
+                    <input type="text" name="model" th:value="${assignment.model}" class="form-control"/>
+                </div>
+
+                <!-- Serial Number -->
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Serial No</label>
+                    <input type="text" name="serialNo" th:value="${assignment.serialNo}" class="form-control"/>
+                </div>
+
+                <!-- Description -->
+                <div class="col-md-12">
+                    <label class="form-label fw-semibold">Description</label>
+                    <textarea name="description" class="form-control" th:text="${assignment.description}" rows="3"></textarea>
+                </div>
+
+                <!-- Project Name (editable text) -->
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Project Name</label>
+                    <input type="text" name="projectName" th:value="${assignment.project.projectName}" class="form-control"/>
+                </div>
+
+                <!-- Assigned To (editable text) -->
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Assigned To</label>
+                    <input type="text" name="assignedTo" th:value="${assignment.assignedTo.name}" class="form-control"/>
+                </div>
+
+                <!-- Attachment -->
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Attachment (PDF)</label>
+                    <input type="file" name="file" class="form-control" accept="application/pdf"/>
+                    <small th:if="${assignment.attachmentPath}" class="text-muted">
+                        Current file:
+                        <a th:href="@{${assignment.attachmentPath}}" target="_blank">View PDF</a>
+                    </small>
+                </div>
+
+                <!-- Buttons -->
+                <div class="col-12 d-flex justify-content-between mt-3">
+                    <a th:href="@{/resource-assignments}" class="btn btn-secondary">Cancel</a>
+                    <button type="submit" class="btn btn-success"
+                            th:text="${assignment.id != null} ? 'Update' : 'Create'"></button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>

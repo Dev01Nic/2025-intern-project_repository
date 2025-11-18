@@ -1,0 +1,81 @@
+<div th:fragment="nodalOfficerListFragment">
+    <!-- Section Card -->
+    <div class="card shadow-lg mt-4">
+        <div class="card-body">
+            <h2 class="h5 text-primary border-bottom pb-2 mb-3">Nodal Officer Users</h2>
+
+            <!-- Button to open New Nodal Officer Modal -->
+            <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#nodalModal">
+                + New Nodal Officer
+            </button>
+
+            <!-- Responsive Table -->
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped align-middle">
+                    <thead class="table-primary">
+                        <tr>
+                            <th>ID</th>
+                            <th>Username</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="user : ${nodalUser}">
+                            <td th:text="${user.id}"></td>
+                            <td th:text="${user.username}"></td>
+                            <td th:text="${user.name}"></td>
+                            <td th:text="${user.email}"></td>
+                            <td>
+                                <div class="dropdown dropend">
+                                    <button class="btn btn-sm btn-light" type="button"
+                                            th:id="'actionMenuButton_' + ${user.id}"
+                                            data-bs-toggle="dropdown" aria-expanded="false">
+                                        ⋮
+                                    </button>
+                                    <ul class="dropdown-menu" th:aria-labelledby="'actionMenuButton_' + ${user.id}">
+                                        <li>
+                                            <a class="dropdown-item" href="#"
+                                               data-bs-toggle="modal"
+                                               th:data-bs-target="'#viewNodalModal_' + ${user.id}">
+                                                View User
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(nodalUser)}">
+                            <td colspan="5" class="text-center text-muted">No users found.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- New Nodal Officer Modal -->
+    <div class="modal fade" id="nodalModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content shadow rounded-3">
+                <div class="modal-body">
+                    <div th:replace="fragments/nodal_form_fragment :: nodalFormFragment"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- View Nodal Officer Modal (per record) -->
+    <div th:each="user : ${nodalUser}"
+         th:id="'viewNodalModal_' + ${user.id}"
+         class="modal fade" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content shadow rounded-3">
+                <div class="modal-body">
+                    <div th:replace="fragments/nodal_officer_view_fragment :: nodal_officer_view_fragment"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,112 @@
+<div th:fragment="aoFormFragment">
+    <div class="card shadow-lg mt-4">
+        <div class="card-body">
+            <h2 class="h5 text-primary border-bottom pb-2 mb-3">Assisting Officer Form</h2>
+
+            <form th:action="@{/aofficer/create}" th:object="${aoUser}" method="post" class="row g-3">
+                <input type="hidden" th:field="*{id}"/> <!-- For edit -->
+
+                <!-- Username Dropdown -->
+                <div class="col-md-6">
+                    <label for="aoUsernameSelect" class="form-label fw-semibold">Select Username</label>
+                   <select id="aoUsernameSelect" class="form-select">
+    <option value="">-- Select AO --</option>
+    <option th:each="ao : ${allAOs}" 
+            th:value="${ao.id}" 
+            th:text="${ao.username}">
+    </option>
+</select>
+                </div>
+
+                <!-- Name -->
+                <div class="col-md-6">
+                    <label for="aoName" class="form-label fw-semibold">Name</label>
+                    <input type="text" id="aoName" th:field="*{name}" class="form-control" readonly>
+                </div>
+
+                <!-- Email -->
+                <div class="col-md-6">
+                    <label for="aoEmail" class="form-label fw-semibold">Email</label>
+                    <input type="email" id="aoEmail" th:field="*{email}" class="form-control" readonly>
+                </div>
+
+                <!-- Phone -->
+                <div class="col-md-6">
+                    <label for="aoPhone" class="form-label fw-semibold">Phone Number</label>
+                    <input type="text" id="aoPhone" th:field="*{phoneNo}" class="form-control" readonly>
+                </div>
+
+                <!-- Password
+                <div class="col-md-6">
+                    <label for="aoPassword" class="form-label fw-semibold">Password</label>
+                    <input type="password" id="aoPassword" th:field="*{password}" class="form-control" readonly>
+                </div> -->
+
+                <!-- Designation -->
+                <div class="col-md-6">
+                    <label for="aoDesignation" class="form-label fw-semibold">Designation</label>
+                    <input type="text" id="aoDesignation" th:field="*{designation}" class="form-control" readonly>
+                </div>
+
+                <!-- Department -->
+                <div class="col-md-6">
+                    <label for="aoDepartment" class="form-label fw-semibold">Department</label>
+                    <select id="aoDepartment" th:field="*{department}" class="form-select" disabled>
+                        <option th:each="dept : ${departments}"
+                                th:value="${dept.deptId}"
+                                th:text="${dept.deptName}">
+                        </option>
+                    </select>
+                </div>
+
+                <!-- Role -->
+                <div class="col-md-6">
+                    <label for="aoRole" class="form-label fw-semibold">Role</label>
+                    <select id="aoRole" th:field="*{role}" class="form-select" disabled>
+                        <option th:each="role : ${roles}"
+                                th:value="${role.roleId}"
+                                th:text="${role.roleName}">
+                        </option>
+                    </select>
+                </div>
+
+                <!-- Submit -->
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary px-4">Assign Assisting Officer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- JS to auto-populate fields -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const usernameSelect = document.getElementById('aoUsernameSelect');
+
+        usernameSelect.addEventListener('change', function() {
+            const aoId = this.value;
+            if (!aoId) return;
+
+            fetch('/aofficer/details/' + aoId)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('aoName').value = data.name || '';
+                    document.getElementById('aoEmail').value = data.email || '';
+                    document.getElementById('aoPhone').value = data.phoneNo || '';
+                    document.getElementById('aoUsername').value = data.username || '';
+                    document.getElementById('aoPassword').value = ''; // leave empty for security
+                    document.getElementById('aoDesignation').value = data.designation || '';
+
+                    // Department dropdown
+                    const deptSelect = document.getElementById('aoDepartment');
+                    if (data.departmentId) deptSelect.value = data.departmentId;
+
+                    // Role dropdown
+                    const roleSelect = document.getElementById('aoRole');
+                    if (data.roleId) roleSelect.value = data.roleId;
+                })
+                .catch(error => console.error('Error fetching AO details:', error));
+        });
+    });
+    </script>
+</div>

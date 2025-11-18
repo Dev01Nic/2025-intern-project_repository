@@ -1,0 +1,77 @@
+<div th:fragment="acceptanceLetterFormFragment">
+    <div class="card shadow-lg mt-4">
+        <div class="card-body">
+            <h2 class="h5 text-primary border-bottom pb-2 mb-3">Acceptance Letter Form</h2>
+
+            <form th:action="@{/acceptance-letters/save}" th:object="${acceptanceLetter}" method="post" class="row g-3">
+
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Subject</label>
+                    <input type="text" th:field="*{subject}" class="form-control" required/>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Letter Date</label>
+                    <input type="date" th:field="*{letterDate}" class="form-control"/>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Sender Name</label>
+                    <input type="text" th:field="*{senderName}" class="form-control" required/>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Sender Designation</label>
+                    <input type="text" th:field="*{senderDesignation}" class="form-control"/>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Sender Email</label>
+                    <input type="email" th:field="*{senderEmail}" class="form-control"/>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Phone No</label>
+                    <input type="text" th:field="*{phoneNo}" class="form-control"/>
+                </div>
+
+                <div class="col-md-12">
+                    <label class="form-label fw-semibold">Sender Address</label>
+                    <textarea th:field="*{senderAddress}" class="form-control"></textarea>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Status</label>
+                    <select th:field="*{status}" class="form-select">
+                        <option value="Pending">Pending</option>
+                        <option value="Approved">Approved</option>
+                        <option value="Rejected">Rejected</option>
+                    </select>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Project</label>
+                    <select th:field="*{project}" class="form-select" required>
+                        <option th:value="${project}" th:text="${project.projectName}" selected></option>
+                    </select>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Proposal</label>
+                    <select th:field="*{proposal}" class="form-select" required>
+                        <option th:each="prop : ${proposals}" th:value="${prop}" th:text="${prop.proposalTitle}"></option>
+                    </select>
+                </div>
+                
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">File Path</label>
+                  <input type="file" th:field="*{filePath}" accept="application/pdf" required/>
+                </div>
+
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary px-4">Save Acceptance Letter</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
