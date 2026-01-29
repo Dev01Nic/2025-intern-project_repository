@@ -1,13 +1,27 @@
 package com.portal.controller;
 
 import com.portal.model.ProjectDetails;
+import com.portal.model.ResourceAssignment;
 import com.portal.model.TechnicalUser;
+import com.portal.repository.AcceptanceLetterRepository;
 import com.portal.repository.CategoryRepository;
+import com.portal.repository.ChangeRequestRepository;
+import com.portal.repository.DataCenterRepository;
 import com.portal.repository.DepartmentRepository;
+import com.portal.repository.DepartmentUserRepository;
+import com.portal.repository.HostingRepository;
+import com.portal.repository.IssueTrackingRepository;
+import com.portal.repository.PriorityRepository;
 import com.portal.repository.ProjectDetailsRepository;
+import com.portal.repository.ProjectManualRepository;
+import com.portal.repository.ProjectProposalRepository;
+import com.portal.repository.ProjectSignoffRepository;
+import com.portal.repository.RequestLetterRepository;
+import com.portal.repository.ResourceAssignmentRepository;
 import com.portal.repository.RoleRepository;
 import com.portal.repository.StatusRepository;
 import com.portal.repository.TechnicalUserRepository;
+import com.portal.repository.UATLetterRepository;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -19,7 +33,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/hoo")
@@ -31,20 +47,62 @@ public class HooController {
     private final RoleRepository roleRepository;
     private final CategoryRepository categoryRepository;
     private final StatusRepository statusRepository;
+    private final PriorityRepository priorityRepository;
+    private final ProjectProposalRepository projectProposalRepository;
+    private final RequestLetterRepository requestLetterRepository;
+    private final AcceptanceLetterRepository acceptanceLetterRepository;
+    private final ProjectSignoffRepository projectSignoffRepository;
+    private final ProjectManualRepository projectManualRepository;
+    private final ResourceAssignmentRepository resourceAssignmentRepository;
+    private final HostingRepository hostingRepository;
+    private final DataCenterRepository dataCenterRepository;
+    private final UATLetterRepository uatLetterRepository;
+    private final IssueTrackingRepository issueTrackingRepository;
+    private final DepartmentUserRepository departmentUserRepository;
+    private final ProjectDetailsRepository projectDetailsRepository;
+    private final ChangeRequestRepository changeRequestRepository;
     
-    public HooController(TechnicalUserRepository userRepository,
+    public HooController(ProjectDetailsRepository projectRepository,
             DepartmentRepository departmentRepository,
-            RoleRepository roleRepository,
-            ProjectDetailsRepository projectRepository,
+            TechnicalUserRepository userRepository,
+            PriorityRepository priorityRepository,
             CategoryRepository categoryRepository,
-            StatusRepository statusRepository) {
-this.projectRepository = projectRepository;
-this.userRepository = userRepository;
-this.departmentRepository = departmentRepository;
-this.roleRepository = roleRepository;
-this.categoryRepository = categoryRepository;
-this.statusRepository = statusRepository;
-}
+            ProjectProposalRepository projectProposalRepository,
+            RequestLetterRepository requestLetterRepository,
+            AcceptanceLetterRepository acceptanceLetterRepository,
+            ProjectSignoffRepository projectSignoffRepository,
+            ProjectManualRepository projectManualRepository,
+            ResourceAssignmentRepository resourceAssignmentRepository,
+            DataCenterRepository dataCenterRepository,
+            HostingRepository hostingRepository,
+            RoleRepository roleRepository,
+            UATLetterRepository uatLetterRepository,
+            StatusRepository statusRepository,
+            IssueTrackingRepository issueTrackingRepository,
+            DepartmentUserRepository departmentUserRepository,
+            ProjectDetailsRepository projectDetailsRepository,
+            ChangeRequestRepository changeRequestRepository) {
+    	this.projectRepository = projectRepository;
+        this.departmentRepository = departmentRepository;
+        this.userRepository = userRepository;
+        this.priorityRepository = priorityRepository;
+        this.categoryRepository = categoryRepository;
+        this.projectProposalRepository = projectProposalRepository;
+        this.requestLetterRepository = requestLetterRepository;
+        this.acceptanceLetterRepository = acceptanceLetterRepository; 
+        this.projectSignoffRepository = projectSignoffRepository;
+        this.projectManualRepository = projectManualRepository;
+        this.resourceAssignmentRepository = resourceAssignmentRepository;
+        this.hostingRepository = hostingRepository;
+        this.dataCenterRepository = dataCenterRepository;
+        this.roleRepository = roleRepository;
+        this.uatLetterRepository = uatLetterRepository;
+        this.statusRepository = statusRepository;
+        this.issueTrackingRepository = issueTrackingRepository;
+        this.departmentUserRepository = departmentUserRepository;
+        this.projectDetailsRepository = projectDetailsRepository;
+        this.changeRequestRepository = changeRequestRepository;
+    }
 
     
 
@@ -126,11 +184,79 @@ this.statusRepository = statusRepository;
         userRepository.save(user);
         return "redirect:/hoo"; // back to dashboard
     }
-    @GetMapping("/view/{id}")
-    public String viewHooUser(@PathVariable("id") Long id, Model model) {
-    	TechnicalUser user = userRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
-        model.addAttribute("hooUser", user);
-        return "hoo_user_view"; // Thymeleaf template name
+    @GetMapping("/projects/view/{id}")
+    public String viewProject(@PathVariable Long id, Model model) {
+        ProjectDetails project = projectRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid project Id:" + id));
+
+        model.addAttribute("project", project);
+        model.addAttribute("departments", departmentRepository.findAll());
+        model.addAttribute("users", userRepository.findAll());
+        model.addAttribute("priorities", priorityRepository.findAll());
+        model.addAttribute("categories", categoryRepository.findAll());
+        model.addAttribute("roles", roleRepository.findAll());
+
+        List<ResourceAssignment> assignments = resourceAssignmentRepository.findByProject(project);
+
+        List<TechnicalUser> hooUsers = new ArrayList<>();
+        hooUsers.addAll(userRepository.findProjectManagersByRole("Head of Office"));
+        hooUsers.addAll(userRepository.findCreatorsByRole("Head of Office"));
+        model.addAttribute("hooUsers", hooUsers);
+        model.addAttribute("hooUser", new TechnicalUser());
+
+        List<TechnicalUser> hodUsers = new ArrayList<>();
+        hodUsers.addAll(userRepository.findProjectManagersByRole("Head of Department"));
+        hodUsers.addAll(userRepository.findCreatorsByRole("Head of Department"));
+        model.addAttribute("hodUsers", hodUsers);
+        model.addAttribute("hodUser", new TechnicalUser());
+
+        model.addAttribute("nodalUsers", userRepository.findByRole_RoleName("Nodal Officer"));
+        model.addAttribute("nodalUser", new TechnicalUser());
+
+        List<TechnicalUser> aoUsers = assignments.stream()
+                .map(ResourceAssignment::getAssignedTo)
+                .filter(u -> u.getRole().getRoleName().equals("Assisting Officer"))
+                .collect(Collectors.toList());
+        model.addAttribute("aoUsers", aoUsers);
+        model.addAttribute("aoUser", new TechnicalUser());
+
+        List<TechnicalUser> developerUsers = assignments.stream()
+                .map(ResourceAssignment::getAssignedTo)
+                .filter(u -> u.getRole().getRoleName().equals("Developer"))
+                .collect(Collectors.toList());
+        model.addAttribute("developerUsers", developerUsers);
+        model.addAttribute("developerUser", new TechnicalUser());
+
+        model.addAttribute("allAOs", userRepository.findByRole_RoleName("Assisting Officer"));
+        model.addAttribute("allDevelopers", userRepository.findByRole_RoleName("Developer"));
+
+        model.addAttribute("hod", userRepository.findByRole_RoleName("Head of Department"));
+
+        model.addAttribute("resourceAssignment", new com.portal.model.ResourceAssignment());
+        model.addAttribute("devices", resourceAssignmentRepository.findAll());
+
+        model.addAttribute("dataCenter", new com.portal.model.DataCenter());
+        model.addAttribute("hosting", new com.portal.model.Hosting());
+        model.addAttribute("hostings", hostingRepository.findAll());
+        model.addAttribute("datacenters", dataCenterRepository.findAll());
+
+        model.addAttribute("requestLetters", requestLetterRepository.findByProject(project));
+        model.addAttribute("projectProposals", projectProposalRepository.findByProject(project));
+        model.addAttribute("acceptanceLetters", acceptanceLetterRepository.findByProject(project));
+        model.addAttribute("uatLetters", uatLetterRepository.findByProject(project));
+        model.addAttribute("projectSignoffs", projectSignoffRepository.findByProject(project));
+        model.addAttribute("projectManuals", projectManualRepository.findByProject(project));
+
+        model.addAttribute("requestLetter", new com.portal.model.RequestLetter());
+        model.addAttribute("proposal", new com.portal.model.ProjectProposal());
+        model.addAttribute("acceptanceLetter", new com.portal.model.AcceptanceLetter());
+        model.addAttribute("uatLetter", new com.portal.model.UATLetter());
+        model.addAttribute("signoff", new com.portal.model.ProjectSignoff());
+        model.addAttribute("manual", new com.portal.model.ProjectManual());
+
+        return "project_view";
     }
-}
+
+    }
+
+

@@ -265,6 +265,7 @@
 </div>
 
 <!-- Cancel Change Request Modal -->
+<!-- Cancel Change Request Modal -->
 <div class="modal fade" id="cancelChangeModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-md modal-dialog-scrollable">
         <div class="modal-content">
@@ -285,17 +286,20 @@
                     </div>
                     <div class="mb-3">
                         <label for="cancel-change-remarks" class="form-label">Reason for Cancellation</label>
-                        <textarea id="cancel-change-remarks" name="remarks" class="form-control" rows="3" required></textarea>
+                        <textarea id="cancel-change-remarks" name="remarks" class="form-control" rows="3" required 
+                                  placeholder="Please provide reason for cancellation..."></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-danger">Cancel Request</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-danger">Confirm Cancellation</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
 
+<!-- Close Change Request Modal -->
 <!-- Close Change Request Modal -->
 <div class="modal fade" id="closeChangeModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-md modal-dialog-scrollable">
@@ -316,12 +320,14 @@
                         <input type="text" id="close-change-project" class="form-control" readonly>
                     </div>
                     <div class="mb-3">
-                        <label for="close-change-remarks" class="form-label">Remarks</label>
-                        <textarea id="close-change-remarks" name="remarks" class="form-control" rows="3" required></textarea>
+                        <label for="close-change-remarks" class="form-label">Completion Remarks</label>
+                        <textarea id="close-change-remarks" name="remarks" class="form-control" rows="3" required 
+                                  placeholder="Please provide completion details..."></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-success">Close Request</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-success">Confirm Closure</button>
                 </div>
             </form>
         </div>

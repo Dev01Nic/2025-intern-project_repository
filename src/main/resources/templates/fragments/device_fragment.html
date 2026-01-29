@@ -1,0 +1,72 @@
+<div th:fragment="deviceListFragment">
+    <div class="card shadow-lg mt-4">
+        <div class="card-body">
+            <h2 class="h5 text-primary border-bottom pb-2 mb-3">Assigned Devices</h2>
+            <!-- Responsive Table -->
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped align-middle">
+                    <thead class="table-primary">
+                        <tr>
+                            <th>ID</th>
+                            <th>Issued Date</th>
+                            <th>Make</th>
+                            <th>Model</th>
+                            <th>Serial No</th>
+                            <th>Project</th>
+                            <th>Assigned To</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="device : ${devices}">
+                            <td th:text="${device.id}"></td>
+                            <td th:text="${device.issuedDate}"></td>
+                            <td th:text="${device.make}"></td>
+                            <td th:text="${device.model}"></td>
+                            <td th:text="${device.serialNo}"></td>
+                           <!--  <td>
+                                <a th:if="${device.attachmentPath}" th:href="@{${device.attachmentPath}}" target="_blank"
+                                   class="btn btn-sm btn-outline-primary">View</a>
+                                <span th:unless="${device.attachmentPath}" class="text-muted">N/A</span>
+                            </td>-->
+                            <td th:text="${device.project != null ? device.project.projectName : 'N/A'}"></td>
+                            <td th:text="${device.assignedTo != null ? device.assignedTo.name : 'N/A'}"></td>
+                            <td>
+                                <div class="dropdown dropend">
+                                    <button class="btn btn-sm btn-light" type="button" id="actionMenuButton"
+                                            data-bs-toggle="dropdown" aria-expanded="false">
+                                        ⋮
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="actionMenuButton">
+                                        <li>
+                                            <a class="dropdown-item" href="#"
+                                               data-bs-toggle="modal"
+                                               th:data-bs-target="'#viewDeviceModal_' + ${device.id}">
+                                                View Device
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(devices)}">
+                            <td colspan="10" class="text-center text-muted">No devices found.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- Per-Device View Modals -->
+    <div th:each="device : ${devices}" 
+         th:id="'viewDeviceModal_' + ${device.id}" 
+         class="modal fade" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content shadow rounded-3">
+                <div class="modal-body">
+                    <div th:replace="fragments/device_view_fragment :: device_view_fragment"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

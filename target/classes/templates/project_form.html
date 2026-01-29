@@ -175,13 +175,14 @@
                     </div>
 
                     <div class="col-md-6">
-                        <label class="form-label">Status:</label>
-                        <select name="statusId" class="form-select" required>
-                            <option value="" disabled selected>Select Status</option>
-                            <option value="New">New</option>
-                            <option value="Ongoing">Ongoing</option>
-                            <option value="Completed">Completed</option>
-                        </select>
+                    <label class="form-label">Status:</label>
+                      <select name="statusId" class="form-select" required>
+    <option value="" disabled selected>Select Status</option>
+    <option th:each="s : ${statuses}"
+            th:value="${s.id}"
+            th:text="${s.name}">
+    </option>
+</select>
                     </div>
 
                     <div class="col-md-6">

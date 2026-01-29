@@ -322,6 +322,7 @@ public class HodController {
         model.addAttribute("users", userRepository.findAll());
         model.addAttribute("priorities", priorityRepository.findAll());
         model.addAttribute("categories", categoryRepository.findAll());
+        model.addAttribute("statuses", statusRepository.findAll()); 
         return "project_form";
     }
 
@@ -371,6 +372,7 @@ public class HodController {
         model.addAttribute("priorities", priorityRepository.findAll());
         model.addAttribute("categories", categoryRepository.findAll());
         model.addAttribute("roles", roleRepository.findAll());
+        model.addAttribute("statuses", statusRepository.findAll()); 
         List<ResourceAssignment> assignments = resourceAssignmentRepository.findByProject(project);
         
        

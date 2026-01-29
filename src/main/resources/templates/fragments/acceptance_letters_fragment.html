@@ -1,0 +1,66 @@
+<div th:fragment="acceptanceLettersFragment">
+    <div class="card shadow-lg mt-4">
+        <div class="card-body">
+            <h2 class="h5 text-primary border-bottom pb-2 mb-3">Acceptance Letters</h2>
+
+
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped align-middle">
+                    <thead class="table-primary">
+                        <tr>
+                            <th>ID</th>
+                            <th>Subject</th>
+                            <th>Date</th>
+                            <th>Sender</th>
+                            <th>Designation</th>
+                            <th>Status</th>
+                            <th>Proposal</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="letter : ${acceptanceLetters}">
+                            <td th:text="${letter.id}"></td>
+                            <td th:text="${letter.subject}"></td>
+                            <td th:text="${letter.letterDate}"></td>
+                            <td th:text="${letter.senderName}"></td>
+                            <td th:text="${letter.senderDesignation}"></td>
+                            <td th:text="${letter.status}"></td>
+                            <td th:text="${letter.proposal?.proposalTitle}"></td>
+                            <td>
+                                <div class="dropdown dropend">
+                                    <button class="btn btn-sm btn-light" type="button"
+                                            th:id="'actionMenuButton_' + ${letter.id}"
+                                            data-bs-toggle="dropdown" aria-expanded="false">
+                                        ⋮
+                                    </button>
+                                    <ul class="dropdown-menu" th:aria-labelledby="'actionMenuButton_' + ${letter.id}">
+                                        <li>
+                                            <a class="dropdown-item" href="#"
+                                               data-bs-toggle="modal"
+                                               th:data-bs-target="'#viewAcceptanceModal_' + ${letter.id}">
+                                                View
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- View Modals -->
+    <div th:each="letter : ${acceptanceLetters}"
+         th:id="'viewAcceptanceModal_' + ${letter.id}"
+         class="modal fade" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content shadow rounded-3">
+                <div class="modal-body">
+                    <div th:replace="fragments/acceptance_letter_view_fragment :: acceptance_letter_view_fragment"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

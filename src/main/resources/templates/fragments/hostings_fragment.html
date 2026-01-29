@@ -1,0 +1,75 @@
+<div th:fragment="hostingsListFragment">
+    <div class="card shadow-lg mt-4">
+        <div class="card-body">
+            <h2 class="h5 text-primary border-bottom pb-2 mb-3">Hosting Details</h2>
+
+            <!-- Responsive Table -->
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped align-middle">
+                    <thead class="table-primary">
+                        <tr>
+                            <th>ID</th>
+                            <th>Hosting Type</th>
+                            <th>Public IP</th>
+                            <th>Private IP</th>
+                            <th>Domain Name</th>
+                            <th>Operating System</th>
+                            <th>Server Specs</th>
+                            <th>Project</th>
+                            <th>Data Center</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="host : ${hostings}">
+                            <td th:text="${host.hostingId}"></td>
+                            <td th:text="${host.hostingType}"></td>
+                            <td th:text="${host.publicIp}"></td>
+                            <td th:text="${host.privateIp}"></td>
+                            <td th:text="${host.domainName}"></td>
+                            <td th:text="${host.operatingSystem}"></td>
+                            <td th:text="${host.serverSpecs}"></td>
+                            <td th:text="${host.project != null ? host.project.projectName : 'N/A'}"></td>
+                            <td th:text="${host.dataCenter != null ? host.dataCenter.name : 'N/A'}"></td>
+                            <!--  <td th:text="${host.dataCenter != null ? host.dataCenter.location : 'N/A'}"></td>
+                            <td th:text="${host.dataCenter != null ? host.dataCenter.contactPerson + ' (' + host.dataCenter.contactNo + ')' : 'N/A'}"></td>-->
+                            <td>
+                                <div class="dropdown dropend">
+                                    <button class="btn btn-sm btn-light" type="button"
+                                            th:id="'actionMenuButton_' + ${host.hostingId}"
+                                            data-bs-toggle="dropdown" aria-expanded="false">
+                                        ⋮
+                                    </button>
+                                    <ul class="dropdown-menu" th:aria-labelledby="'actionMenuButton_' + ${host.hostingId}">
+                                        <li>
+                                            <a class="dropdown-item" href="#"
+                                               data-bs-toggle="modal"
+                                               th:data-bs-target="'#viewHostingModal_' + ${host.hostingId}">
+                                                View Hosting
+                                            </a>
+                                            </li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(hostings)}">
+                            <td colspan="13" class="text-center text-muted">No hosting records found.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- View Hosting Modal (per record) -->
+    <div th:each="host : ${hostings}"
+         th:id="'viewHostingModal_' + ${host.hostingId}"
+         class="modal fade" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content shadow rounded-3">
+                <div class="modal-body">
+                    <div th:replace="fragments/hosting_view_fragment :: hosting_view_fragment"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -312,6 +312,47 @@ public class DepartmentUserController {
 
         return "redirect:/department/issues";
     }
+ // ----------------- Cancel Issue -----------------
+    @PostMapping("/department/issues/cancel")
+    public String cancelIssue(@RequestParam Long issueId, 
+                             @RequestParam String remarks,
+                             Authentication authentication) {
+        IssueTracking issue = issueTrackingRepository.findById(issueId)
+                .orElseThrow(() -> new RuntimeException("Issue not found"));
+        
+        // Update status to "Cancelled"
+        issue.setStatus(statusRepository.findByName("Cancelled")
+                .orElseThrow(() -> new RuntimeException("Cancelled status not found")));
+        issue.setUpdatedAt(LocalDateTime.now());
+        
+        // You can store remarks in a separate field if needed
+        // For now, we'll just update the status
+        
+        issueTrackingRepository.save(issue);
+        
+        return "redirect:/department/issues";
+    }
+
+    // ----------------- Close Issue -----------------
+    @PostMapping("/department/issues/close")
+    public String closeIssue(@RequestParam Long issueId,
+                            @RequestParam String remarks,
+                            Authentication authentication) {
+        IssueTracking issue = issueTrackingRepository.findById(issueId)
+                .orElseThrow(() -> new RuntimeException("Issue not found"));
+        
+        // Update status to "Completed"
+        issue.setStatus(statusRepository.findByName("Completed")
+                .orElseThrow(() -> new RuntimeException("Completed status not found")));
+        issue.setUpdatedAt(LocalDateTime.now());
+        
+        // You can store remarks in a separate field if needed
+        
+        issueTrackingRepository.save(issue);
+        
+        return "redirect:/department/issues";
+    }
+
  // ----------------- Issue Tracking Dashboard -----------------
     @GetMapping("/department/issues/dashboard")
     public String issueTrackingDashboard(Model model, Authentication authentication) {
@@ -416,7 +457,47 @@ public class DepartmentUserController {
 
         return "change_request_form";
     }
+ // ----------------- Cancel Change Request -----------------
+    @PostMapping("/department/change-requests/cancel")
+    public String cancelChangeRequest(@RequestParam Long changeId, 
+                                     @RequestParam String remarks,
+                                     Authentication authentication) {
+        ChangeRequest changeRequest = changeRequestRepository.findById(changeId)
+                .orElseThrow(() -> new RuntimeException("Change request not found"));
+        
+        // Update status to "Cancelled"
+        changeRequest.setStatus(statusRepository.findByName("Cancelled")
+                .orElseThrow(() -> new RuntimeException("Cancelled status not found")));
+        changeRequest.setUpdatedAt(LocalDateTime.now());
+        
+        // Store cancellation remarks if you have a field for it
+        // changeRequest.setCancellationRemarks(remarks);
+        
+        changeRequestRepository.save(changeRequest);
+        
+        return "redirect:/department/change-requests";
+    }
 
+    // ----------------- Close Change Request -----------------
+    @PostMapping("/department/change-requests/close")
+    public String closeChangeRequest(@RequestParam Long changeId,
+                                    @RequestParam String remarks,
+                                    Authentication authentication) {
+        ChangeRequest changeRequest = changeRequestRepository.findById(changeId)
+                .orElseThrow(() -> new RuntimeException("Change request not found"));
+        
+        // Update status to "Completed"
+        changeRequest.setStatus(statusRepository.findByName("Completed")
+                .orElseThrow(() -> new RuntimeException("Completed status not found")));
+        changeRequest.setUpdatedAt(LocalDateTime.now());
+        
+        // Store completion remarks if you have a field for it
+        // changeRequest.setCompletionRemarks(remarks);
+        
+        changeRequestRepository.save(changeRequest);
+        
+        return "redirect:/department/change-requests";
+    }
     // ----------------- Save Change Request -----------------
     @PostMapping("/department/change-requests/save")
     public String saveChangeRequest(@ModelAttribute("changeRequest") ChangeRequest cr,

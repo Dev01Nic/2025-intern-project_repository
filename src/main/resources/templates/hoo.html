@@ -25,14 +25,52 @@
     </style>
 </head>
 <body>
+<div class="d-md-none bg-white p-2 shadow-sm w-100 d-flex justify-content-between align-items-center">
+    <button class="btn btn-outline-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileSidebar">
+                ☰ Menu
+            </button>
+
+            <a href="/" class="btn btn-primary rounded-pill px-3">
+                👤
+            </a>
+        </div>
+
+        <!-- MOBILE OFFCANVAS SIDEBAR -->
+        <div class="offcanvas offcanvas-start" tabindex="-1" id="mobileSidebar">
+            <div class="offcanvas-header">
+                <h4 class="offcanvas-title">Ho Panel</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+            </div>
+
+            <div class="offcanvas-body sidebar p-0">
+                <!-- Dashboard -->
+                <a th:href="@{/hoo}">
+                    <div class="icon">📊</div><span>Dashboard</span>
+                </a>
+
+                <!-- Projects -->
+                <a th:href="@{/hoo/projects/list}">
+                    <div class="icon">📁</div><span>Projects </span>
+                </a>
+            </div>
+        </div>
 <div class="container-fluid">
     <div class="row">
-        <!-- Sidebar -->
+        <!-- DESKTOP SIDEBAR -->
         <nav class="col-md-2 d-none d-md-block sidebar py-4 px-3">
-            <h4>HO Panel</h4>
-            <a th:href="@{/hoo}"><div class="icon">📊</div><span>Dashboard</span></a>
-            <a th:href="@{/hoo/projects/list}"><div class="icon">📁</div><span>Projects</span></a>
+            <h4>Ho Panel</h4>
+
+            <!-- Dashboard -->
+            <a th:href="@{/hoo}">
+                <div class="icon">📊</div><span>Dashboard</span>
+            </a>
+
+            <!-- Projects -->
+           <a th:href="@{/hoo/projects/list}">
+                    <div class="icon">📁</div><span>Projects </span>
+                </a>
         </nav>
+
 
         <!-- Main Content -->
         <main class="col-md-10 ms-sm-auto px-4 py-4">

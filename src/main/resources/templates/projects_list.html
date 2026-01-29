@@ -39,14 +39,52 @@
 </head>
 <body>
 
+<div class="d-md-none bg-white p-2 shadow-sm w-100 d-flex justify-content-between align-items-center">
+    <button class="btn btn-outline-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileSidebar">
+                ☰ Menu
+            </button>
+
+            <a href="/" class="btn btn-primary rounded-pill px-3">
+                👤
+            </a>
+        </div>
+
+        <!-- MOBILE OFFCANVAS SIDEBAR -->
+        <div class="offcanvas offcanvas-start" tabindex="-1" id="mobileSidebar">
+            <div class="offcanvas-header">
+                <h4 class="offcanvas-title">Ho Panel</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+            </div>
+
+            <div class="offcanvas-body sidebar p-0">
+                <!-- Dashboard -->
+                <a th:href="@{/hoo}">
+                    <div class="icon">📊</div><span>Dashboard</span>
+                </a>
+
+                <!-- Projects -->
+                <a th:href="@{/hoo/projects/list}">
+                    <div class="icon">📁</div><span>Projects </span>
+                </a>
+            </div>
+        </div>
 <div class="container-fluid">
     <div class="row">
-        <!-- Sidebar -->
+        <!-- DESKTOP SIDEBAR -->
         <nav class="col-md-2 d-none d-md-block sidebar py-4 px-3">
-            <h4>HO Panel</h4>
-            <a th:href="@{/hoo}"><div class="icon">📊</div><span>Dashboard</span></a>
-            <a th:href="@{/hoo/projects/list}"><div class="icon">📁</div><span>Projects</span></a>
+            <h4>Ho Panel</h4>
+
+            <!-- Dashboard -->
+            <a th:href="@{/hoo}">
+                <div class="icon">📊</div><span>Dashboard</span>
+            </a>
+
+            <!-- Projects -->
+           <a th:href="@{/hoo/projects/list}">
+                    <div class="icon">📁</div><span>Projects </span>
+                </a>
         </nav>
+ 
 
         <!-- Main Content -->
         <main class="col-md-10 ms-sm-auto px-4 py-4">
@@ -111,91 +149,18 @@
         <td th:text="${project.technologiesUsed != null ? project.technologiesUsed : 'N/A'}"></td>
  <!--         <td th:text="${project.projectManager != null ? project.projectManager.name : 'N/A'}"></td>-->
         <td>
-            <button class="btn btn-sm btn-primary"
-                    data-bs-toggle="modal"
-                    data-bs-target="#viewProjectModal"
-                    th:attr="data-id=${project.projectId},
-                             data-name=${project.projectName},
-                             data-desc=${project.description},
-                             data-start=${project.startDate},
-                             data-status=${project.status.name},
-                             data-tech=${project.technologiesUsed},
-                             data-priority=${project.priority != null ? project.priority.priorityName : 'N/A'},
-                             data-dept=${project.department != null ? project.department.deptName : 'N/A'},
-                             data-cat=${project.category != null ? project.category.categoryName : 'N/A'},
-                             data-created=${project.createdBy != null ? project.createdBy.name : 'N/A'},
-                             data-pm=${project.projectManager != null ? project.projectManager.name : 'N/A'},
-                             data-hoo=${project.hoo != null ? project.hoo.name : 'N/A'},
-                             data-hod=${project.hod != null ? project.hod.name : 'N/A'},
-                             data-officer=${project.assistingOfficer != null ? project.assistingOfficer.name : 'N/A'}">
-                View
-            </button>
+           <div class="action-menu">
+                                    <button class="action-btn">⋮</button>
+                                    <div class="action-content">
+                                        <a th:href="@{/hoo/projects/view/{id}(id=${project.projectId})}">Edit Project Details</a>
+                                    </div>
+                                </div>
         </td>
     </tr>
 </tbody>
                 </table>
             </div>
         </main>
-    </div>
-</div>
-
-<!-- View Project Modal -->
-<div class="modal fade" id="viewProjectModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-scrollable">
-        <div class="modal-content">
-            <div class="modal-header bg-primary text-white">
-                <h5 class="modal-title">Project Details</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <dl class="row">
-                    <dt class="col-sm-4">Project ID</dt>
-                    <dd class="col-sm-8" id="m-id"></dd>
-
-                    <dt class="col-sm-4">Project Name</dt>
-                    <dd class="col-sm-8" id="m-name"></dd>
-
-                    <dt class="col-sm-4">Description</dt>
-                    <dd class="col-sm-8" id="m-desc"></dd>
-
-                    <dt class="col-sm-4">Start Date</dt>
-                    <dd class="col-sm-8" id="m-start"></dd>
-
-                    <dt class="col-sm-4">Status</dt>
-                    <dd class="col-sm-8" id="m-status"></dd>
-
-                    <dt class="col-sm-4">Technologies Used</dt>
-                    <dd class="col-sm-8" id="m-tech"></dd>
-
-                    <dt class="col-sm-4">Priority</dt>
-                    <dd class="col-sm-8" id="m-priority"></dd>
-
-                    <dt class="col-sm-4">Department</dt>
-                    <dd class="col-sm-8" id="m-dept"></dd>
-
-                    <dt class="col-sm-4">Category</dt>
-                    <dd class="col-sm-8" id="m-cat"></dd>
-
-                    <dt class="col-sm-4">Created By</dt>
-                    <dd class="col-sm-8" id="m-created"></dd>
-
-                    <dt class="col-sm-4">Project Manager</dt>
-                    <dd class="col-sm-8" id="m-pm"></dd>
-
-                    <dt class="col-sm-4">Head of Office (HOO)</dt>
-                    <dd class="col-sm-8" id="m-hoo"></dd>
-
-                    <dt class="col-sm-4">Head of Department (HOD)</dt>
-                    <dd class="col-sm-8" id="m-hod"></dd>
-
-                    <dt class="col-sm-4">Assisting Officer</dt>
-                    <dd class="col-sm-8" id="m-officer"></dd>
-                </dl>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            </div>
-        </div>
     </div>
 </div>
 

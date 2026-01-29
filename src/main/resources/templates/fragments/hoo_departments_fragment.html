@@ -1,0 +1,71 @@
+<div th:fragment="hooDepartmentsListFragment">
+    <!-- Bootstrap-styled Section -->
+    <div class="card shadow-lg mt-4">
+        <div class="card-body">
+            <h2 class="h5 text-primary border-bottom pb-2 mb-3">All HO Users</h2>
+
+            <!-- Table -->
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped align-middle">
+                    <thead class="table-primary">
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Designation</th>
+                            <th>Department</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="user : ${hooUsers}">
+                            <td th:text="${user.id}"></td>
+                            <td th:text="${user.name}"></td>
+                            <td th:text="${user.email}"></td>
+                            <td th:text="${user.phoneNo != null ? user.phoneNo : 'N/A'}"></td>
+                            <td th:text="${user.designation != null ? user.designation : 'N/A'}"></td>
+                            <td th:text="${user.department != null ? user.department.deptName : 'N/A'}"></td>
+                           <td>
+     <div class="dropdown dropend">
+                                    <button class="btn btn-sm btn-light" type="button"
+                                            th:id="'actionMenuButton_' + ${user.id}"
+                                            data-bs-toggle="dropdown" aria-expanded="false">
+                                        ⋮
+                                    </button>
+                                    <ul class="dropdown-menu" th:aria-labelledby="'actionMenuButton_' + ${user.id}">
+                                        <li>
+                                            <a class="dropdown-item" href="#"
+                                               data-bs-toggle="modal"
+                                               th:data-bs-target="'#viewHooUserModal_' + ${user.id}">
+                                                View User
+                                            </a>
+            </li>
+        </ul>
+    </div>
+</td>
+
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(hooUsers)}">
+                            <td colspan="6" class="text-center text-muted">No users found.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+      <!-- View HOO User Modal (per record) -->
+    <div th:each="user : ${hooUsers}"
+         th:id="'viewHooUserModal_' + ${user.id}"
+         class="modal fade" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content shadow rounded-3">
+                <div class="modal-body">
+                    <div th:replace="fragments/hoo_user_view_fragment :: hoo_user_view_fragment"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

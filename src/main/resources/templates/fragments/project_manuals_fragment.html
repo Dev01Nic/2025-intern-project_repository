@@ -1,0 +1,63 @@
+<div th:fragment="projectManualsFragment">
+    <div class="card shadow-lg mt-4">
+        <div class="card-body">
+            <h2 class="h5 text-primary border-bottom pb-2 mb-3">Project Manuals</h2>
+
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped align-middle">
+                    <thead class="table-primary">
+                        <tr>
+                            <th>ID</th>
+                            <th>Version</th>
+                            <th>Title</th>
+                            <th>Submitted Date</th>
+                            <th>Approved Date</th>
+                            <th>Status</th>
+                            <th>Submitted By</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="manual : ${projectManuals}">
+                            <td th:text="${manual.id}"></td>
+                            <td th:text="${manual.version}"></td>
+                            <td th:text="${manual.title}"></td>
+                            <td th:text="${manual.submittedDate}"></td>
+                            <td th:text="${manual.approvedDate}"></td>
+                            <td th:text="${manual.status}"></td>
+                            <td th:text="${manual.submittedBy.name}"></td>
+                            <td>
+                                <div class="dropdown dropend">
+                                    <button class="btn btn-sm btn-light" type="button"
+                                            th:id="'actionMenuButton_' + ${manual.id}"
+                                            data-bs-toggle="dropdown" aria-expanded="false">⋮</button>
+                                    <ul class="dropdown-menu" th:aria-labelledby="'actionMenuButton_' + ${manual.id}">
+                                        <li>
+                                            <a class="dropdown-item" href="#"
+                                               data-bs-toggle="modal"
+                                               th:data-bs-target="'#viewManualModal_' + ${manual.id}">
+                                                View
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- View Modals -->
+    <div th:each="manual : ${projectManuals}"
+         th:id="'viewManualModal_' + ${manual.id}"
+         class="modal fade" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content shadow rounded-3">
+                <div class="modal-body">
+                    <div th:replace="fragments/project_manual_view_fragment :: project_manual_view_fragment"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
